@@ -13,6 +13,7 @@ const SearchFilter = (props) => (
             value={props.sort} 
             onChange={(e) => props.setSort(e.target.value)}
         >
+            <option value="">--Choisissez un filtre--</option>
             <option value="added">Par ordre d'ajout</option>
             <option value="alphabetical">Par ordre alphabétique</option>
         </select>

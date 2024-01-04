@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { addTask } from '../provider/firebase-database';
+import { serverTimestamp } from "firebase/database";
 
 
 const AddTaskForm = (props) => {
@@ -15,8 +16,8 @@ const AddTaskForm = (props) => {
             name: task.name,
             completed: false,
             rating: 1,
-            createdAt: new Date().toISOString(),
-            lastModified: new Date().toISOString(),
+            createdAt: serverTimestamp(),
+            lastModified: serverTimestamp(),
 
         }, groupId);
         setTask({...task, name: ''});

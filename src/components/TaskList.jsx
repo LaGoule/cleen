@@ -34,10 +34,10 @@ const TaskList = (props) => {
             case 'alphabetical':
                 sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
                 break;
+            default:
             case 'added':
                 sortedTasks.sort((a, b) => a.createdAt - b.createdAt);
                 break;
-            default:
         }
         return sortedTasks;
     }, [sort]);
