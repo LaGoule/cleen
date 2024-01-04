@@ -1,0 +1,184 @@
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  min-width: 320px;
+  min-height: 100vh;
+  gap:5px;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 999em;
+  border: 1px solid transparent;
+  padding: 7px 12px;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #646cff;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+ul{
+  list-style: none;
+  padding-left: 0;
+}
+
+header{
+  display: flex;
+  flex-direction: column;
+  gap:10px;
+
+  margin: 0 0 40px;
+}
+
+header>h1,
+header>nav,
+header>nav>ul{
+  margin: 0;
+}
+
+nav>ul{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 5px;
+}
+
+h2{
+  text-decoration: underline;
+}
+
+ul.todoList{
+  padding: 20px 0;
+
+  display: flex;
+  flex-direction: column;
+  gap:2px;
+}
+
+.todoList>li{
+  text-align: left;
+  display: flex;
+  align-items: center;
+  gap:7px;
+
+  background-color: #444;
+  padding:6px 8px;
+  border-radius: 999em;
+}
+
+input,
+select{
+  color:#fff;
+  font-size: 1em;
+  padding: 5px 10px;
+  opacity: .75;
+  flex-grow: 1;
+}
+
+input:focus{
+  opacity: 1;
+}
+
+input[type="checkbox"]{
+  flex-grow: 0;
+  cursor: pointer;
+}
+.todoList>li>div{
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  flex-grow: 1;
+}
+.todoList>li>div>input[type="text"]{
+  margin:5px;
+  margin-right: 0;
+}
+
+.formGroup{
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  flex-shrink: 1;
+  gap: 0.5em;
+}
+
+.deleteBtn,
+.editBtn{
+  font-size: .9em;
+  background: none;
+  color: #fff;
+  border: none;
+  padding: 0 5px 2px 5px;
+  border-radius: 999em;
+  cursor: pointer;
+
+  opacity: .7;
+
+  align-self:center;
+}
+.editBtn{
+  padding:2px 10px;
+  margin-left: auto;
+}
+.editBtn:hover{
+  opacity: 1;
+  background-color: #3dc25e;
+}
+.deleteBtn:hover{
+  opacity: 1;
+  background-color: #ff6464;
+}
+.saveBtn:hover{
+  opacity: 1;
+  background-color: #646cff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
