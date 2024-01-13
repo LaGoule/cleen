@@ -1,5 +1,5 @@
 import React from 'react';
 
-const UserContext = React.createContext(null);
+const HouseholdContext = React.createContext(null);
 
-export default UserContext;
+export default HouseholdContext;

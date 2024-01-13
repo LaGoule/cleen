@@ -1,17 +1,19 @@
 // AddTaskForm.js
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { addTask } from '../provider/firebase-database';
 import { serverTimestamp } from "firebase/database";
+import HouseholdContext from '../store/HouseholdContext';
 
 
 const AddTaskForm = (props) => {
-    const groupId = "0A1B2C3D4E5F6G7H8I9J"
+    // const groupId = "0A1B2C3D4E5F6G7H8I9J"
+    const { household } = useContext(HouseholdContext);
     const [task, setTask] = useState({name: '', completed: false, createdAt: ''});
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault();
-        addTask({
+        await addTask({
             id: uuidv4(),
             name: task.name,
             completed: false,
@@ -19,8 +21,10 @@ const AddTaskForm = (props) => {
             createdAt: serverTimestamp(),
             lastModified: serverTimestamp(),
 
-        }, groupId);
+        }, household.uid);
         setTask({...task, name: ''});
+
+        console.log('Création dune tâche: '+task.name+' dans le foyer: '+household.uid);
       }
 
   return (

@@ -1,6 +1,8 @@
 // TaskList.js
-import React, { useState, useEffect, useCallback } from 'react';
-import { onValue } from 'firebase/database';
+import React, { useState, useContext, useEffect, useCallback } from 'react';
+import HouseholdContext from '../store/HouseholdContext';
+import { ref, onValue, off } from 'firebase/database';
+import db from '../provider/firebase-database';
 
 import { v4 as uuidv4 } from 'uuid';
 import { getTasks, updateTask } from '../provider/firebase-database';
@@ -11,22 +13,28 @@ import TaskItem from './TaskItem';
 
 
 const TaskList = (props) => {
-    const groupId = "0A1B2C3D4E5F6G7H8I9J"
+    const { household } = useContext(HouseholdContext);
+
     const [tasks, setTasks] = useState([]);
     const [sort, setSort] = useState(false);
     const [filter, setFilter] = useState('');
 
     useEffect(() => {
-        const tasksRef = getTasks(groupId);
-        onValue(tasksRef, (snapshot) => {
-          const data = snapshot.val();
-          const taskList = [];
-          for(let id in data) {
-              taskList.push({ firebaseKey: id, ...data[id] });
-          }
-          setTasks(taskList);
+        const tasksRef = ref(db, 'tasks/' + household.uid);
+        const fetchTasks = onValue(tasksRef, (snapshot) => {
+            const data = snapshot.val();
+            const taskList = [];
+            for(let id in data) {
+                taskList.push({ firebaseKey: id, ...data[id] });
+            }
+            setTasks(taskList);
         });
-      }, [groupId]);
+    
+        return () => {
+            // Arrêtez d'écouter les mises à jour lorsque le composant est démonté
+            off(tasksRef, fetchTasks);
+        };
+    }, [household.uid]);
 
     const sortTasks = useCallback((tasks) => {
         let sortedTasks = [...tasks];
@@ -48,7 +56,7 @@ const TaskList = (props) => {
     
         // Mettez à jour la tâche dans Firebase
         try {
-          await updateTask(updatedTask, groupId);
+          await updateTask(updatedTask, household.uid);
           console.log("Task updated successfully");
         } catch (error) {
           console.error("Error updating task", error);
@@ -93,7 +101,6 @@ const TaskList = (props) => {
                                         onTaskToggle={handleTaskToggle}
                                         setTasks={setTasks}
                                         tasks={tasks}
-                                        groupId={groupId}
                                     />
                                 </li>
                             :

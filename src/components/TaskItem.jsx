@@ -1,11 +1,12 @@
 // TaskItem.jsx
-import React, { useState, useCallback, useRef } from 'react';
-import { getDatabase, ref, remove } from "firebase/database";
+import React, { useState, useContext, useRef } from 'react';
 import { deleteTask } from '../provider/firebase-database';
+import HouseholdContext from '../store/HouseholdContext';
 
 
 
 const TaskItem = (props) => {
+    const { household } = useContext(HouseholdContext);
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(props.task.text);
     const editInput = useRef();
@@ -13,10 +14,8 @@ const TaskItem = (props) => {
 
     //Fonction pour supprimer une tâche
     const handleDelete = () => {
-        deleteTask(props.task.firebaseKey, props.groupId);
+        deleteTask(props.task.firebaseKey, household.uid);
     };
-
-    
 
     // const handleEdit = () => {
     //     setIsEditing(true);

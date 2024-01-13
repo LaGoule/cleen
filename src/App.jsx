@@ -13,6 +13,7 @@ import PageLogin from './pages/PageLogin';
 import PageSignup from './pages/PageSignup';
 import PageDetail from './pages/PageDetail';
 import PageProfile from './pages/PageProfile';
+import PageHousehold from './pages/PageHousehold';
 import PageHome from './pages/PageHome';
 
 function App() {
@@ -26,13 +27,16 @@ function App() {
   // On check si l'utilisateur n'est pas présent dans la base de données
   // Si c'est le cas on le créer
   const checkAndCreateUser = async (user, setUser) => {
+    if (!user) {
+      return;
+    }
     const userRef = ref(db, 'users/' + user.uid);
     const snapshot = await get(userRef);
     if (!snapshot.exists()) {
       // Si l'utilisateur n'existe pas, créez l'utilisateur
       await set(userRef, { 
         uid: user.uid,
-        name: user.displayName,
+        name: user.displayName || 'Anonymous',
         email: user.email,
         // Ajoutez d'autres propriétés de l'utilisateur si nécessaire
       });
@@ -53,9 +57,16 @@ function App() {
   const checkAndSetHousehold = async (user, setUser) => {
     const householdId = await getHouseholdForUser(user.uid);
     if (householdId) {
+      // Récupérez les informations du foyer de la base de données
+      const householdSnapshot = await get(ref(db, 'households/' + householdId));
+      const householdData = householdSnapshot.val();
+      setHousehold(householdData);
       setUser({ ...user, householdId });
       // Ajoutez l'utilisateur au foyer
       await set(ref(db, 'households/' + householdId + '/users/' + user.uid), true);
+
+      setHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
+
       return true;
     }
     return false;
@@ -63,8 +74,8 @@ function App() {
 
   // Sinon on créer un foyer a id unique et on l'ajoute a l'utilisateur
   const createAndSetHousehold = async (user, setUser) => {
-    // Vérifiez si un foyer est en cours de création
-    if (isCreatingHousehold) {
+    // Vérifiez si il n'y a pas d'utilisateur ou si un foyer est en cours de création
+    if (!user || isCreatingHousehold) {
       return;
     }
   
@@ -76,11 +87,12 @@ function App() {
   
     // Définissez isCreatingHousehold sur true
     setIsCreatingHousehold(true);
-  
+    
     const newHouseholdRef = push(ref(db, 'households'));
     await set(newHouseholdRef, {
       // Ajoutez d'autres propriétés du foyer si nécessaire
-      name: user.displayName + "'s Household",
+      uid: newHouseholdRef.key,
+      name: "Foyer de " + user.displayName + "",
       users: {
         [user.uid]: true, // Ajoutez l'utilisateur au foyer
       },
@@ -88,6 +100,7 @@ function App() {
     const householdId = newHouseholdRef.key;
     await set(ref(db, 'users/' + user.uid + '/householdId'), householdId);
     setUser({ ...user, householdId });
+    setHousehold({ uid: householdId, name: "Foyer de " + user.displayName + "", users: { [user.uid]: true } });
   
     // Définissez isCreatingHousehold sur false
     setIsCreatingHousehold(false);
@@ -110,8 +123,6 @@ function App() {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
         await checkAndCreateUser(user, setUser);
-        console.log("user set to: "+user.uid);
-        console.log("household set to: "+household);
       } else {
         setUser(null);
       }
@@ -132,11 +143,9 @@ function App() {
     }
   }
 
-  // const exempleGroupId = '0A1B2C3D4E5F6G7H8I9J'
-
   return (
     <>
-      <HouseholdContext.Provider value={household}>
+      <HouseholdContext.Provider value={{ household, householdId: user?.householdId }}>
         <header>
           <h1>Cleen</h1>
 
@@ -146,10 +155,9 @@ function App() {
                   <>
                     <li><NavLink to="/home" style={({ isActive }) => (navLinkStyle(isActive))}>Dashboard</NavLink></li>
                     <li><NavLink to="/household" style={({ isActive }) => (navLinkStyle(isActive))}>Foyer</NavLink></li>
-                    <li><NavLink to="/profile" style={({ isActive }) => (navLinkStyle(isActive))}>Profile
-                      {/* {user.displayName ? user.displayName : "Profile"}   */}
-                    </NavLink></li>
-                    <li><a onClick={logout}>Déconnexion</a></li>
+                    <li><NavLink to="/profile" style={({ isActive }) => (navLinkStyle(isActive))}>Profile</NavLink></li>
+                    <li><a onClick={logout}
+                    >Déconnexion</a></li>
                     <li></li>
                   </>
               </ul>
@@ -165,6 +173,7 @@ function App() {
           <Route path="/signup" element={<PageSignup />} />
           <Route path="/home" element={user ? <PageHome /> : <PageLogin />} />
           <Route path="/profile" element={user ? <PageProfile user={user} /> : <PageLogin />} />
+          <Route path="/household" element={user ? <PageHousehold /> : <PageLogin />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
       </HouseholdContext.Provider>

@@ -1,15 +1,17 @@
+import { useState } from 'react';
+
 import app from "./firebase-app";
-import { getAuth, signOut, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, GoogleAuthProvider } from "firebase/auth";
-import { getHouseholdForUser } from "./firebase-database";
+import { getAuth, signOut, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
+
 
 const handleGoogleLogin = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    console.log("User signed in with Google", user);
+    console.log("User signed in with Google");
   } catch (error) {
     console.error("Error signing in with Google", error);
     throw error;
@@ -19,7 +21,7 @@ const handleGoogleLogin = async () => {
 const handleLogin = async (email, password) => {
   try {
       await signInWithEmailAndPassword(auth, email, password);
-      console.log("User signed in");
+      console.log("User signed in with email and password");
       // Enregistrez l'email et le mot de passe dans le localStorage après une connexion réussie
       localStorage.setItem('email', email);
       localStorage.setItem('password', password);
