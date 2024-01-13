@@ -13,8 +13,7 @@ const TaskItem = (props) => {
     //Fonction pour supprimer une tâche
     const handleDelete = () => {
         deleteTask(props.task.firebaseKey, props.groupId);
-    }
-
+    };
 
     // const handleEdit = () => {
     //     setIsEditing(true);
