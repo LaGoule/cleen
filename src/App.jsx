@@ -22,7 +22,6 @@ function App() {
     onAuthStateChanged(auth, (user) => {
       if (user) {
         setUser(user);
-        // console.log(user);
       } else {
         setUser(null);
       }
@@ -53,9 +52,11 @@ function App() {
               <ul>
                   <>
                     <li><NavLink to="/home" style={({ isActive }) => (navLinkStyle(isActive))}>Home</NavLink></li>
-                    <li><NavLink to="/profile" style={({ isActive }) => (navLinkStyle(isActive))}>Profile</NavLink></li>
-                    <li><NavLink to="/profile/Damien" style={({ isActive }) => (navLinkStyle(isActive))}>Damien</NavLink></li>
-                    <a onClick={logout}>Déconnexion</a>
+                    <li><NavLink to="/profile" style={({ isActive }) => (navLinkStyle(isActive))}>
+                      {user.displayName ? user.displayName : "Profile"}  
+                    </NavLink></li>
+                    <li><a onClick={logout}>Déconnexion</a></li>
+                    <li></li>
                   </>
               </ul>
             </nav>
@@ -70,7 +71,6 @@ function App() {
           <Route path="/signup" element={<PageSignup />} />
           <Route path="/home" element={user ? <PageHome /> : <PageLogin />} />
           <Route path="/profile" element={user ? <PageProfile /> : <PageLogin />} />
-          <Route path="/profile/:id" element={user ? <PageDetail /> : <PageLogin />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
     </>

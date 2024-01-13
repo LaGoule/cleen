@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword  } from 'firebase/auth';
-import auth, { handleLogin, handlePasswordReset } from '../provider/firebase-auth';
+import auth, { handleLogin, handleGoogleLogin, handlePasswordReset } from '../provider/firebase-auth';
 import { NavLink, useNavigate } from 'react-router-dom'
+
 
 const PageLogin = () => {
 
@@ -25,10 +26,20 @@ const PageLogin = () => {
         }
     }
     
+    const onGoogleLogin = async () => {
+        try {
+            await handleGoogleLogin();
+            navigate('/');
+        } catch (error) {
+            console.error("Error signing in with Google", error);
+        }
+    }
+    
     return (
         <>
             <h2>Connexion requise</h2>
             {/* <p>Veuillez vous connectez.</p> */}
+
 
             <form>                                              
                 <div>
@@ -69,6 +80,9 @@ const PageLogin = () => {
                     </button>
                 </div>                               
             </form>
+
+            <br/><hr/><br/>
+            <button onClick={onGoogleLogin}>Se connecter avec Google</button><br/><br/>
         
             <p>
                 Pas encore de compte? {' '}

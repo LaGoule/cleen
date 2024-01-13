@@ -3,7 +3,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { onValue } from 'firebase/database';
 
 import { v4 as uuidv4 } from 'uuid';
-import { getTasks } from '../provider/firebase-database';
+import { getTasks, updateTask } from '../provider/firebase-database';
 
 import AddTaskForm from './AddTaskForm';
 import SearchFilter from './SearchFilter';
@@ -42,9 +42,24 @@ const TaskList = (props) => {
         return sortedTasks;
     }, [sort]);
 
-    const handleCheck = useCallback((task) => {
-        setTasks(tasks.map(t => t === task ? { ...t, completed: !t.completed } : t));
-    }, [tasks]);
+    const handleTaskToggle = async (task) => {
+        // Créez une copie de la tâche et modifiez la propriété 'checked'
+        const updatedTask = { ...task, checked: !task.checked };
+    
+        // Mettez à jour la tâche dans Firebase
+        try {
+          await updateTask(updatedTask, groupId);
+          console.log("Task updated successfully");
+        } catch (error) {
+          console.error("Error updating task", error);
+        }
+      }
+
+
+
+
+
+
 
     let sortedTasks = sortTasks(tasks);
 
@@ -73,8 +88,9 @@ const TaskList = (props) => {
                                         textDecoration: task.checked ? 'line-through' : 'none'
                                 }}>
                                     <TaskItem 
+                                    
                                         task={task}
-                                        handleCheck={handleCheck}
+                                        onTaskToggle={handleTaskToggle}
                                         setTasks={setTasks}
                                         tasks={tasks}
                                         groupId={groupId}

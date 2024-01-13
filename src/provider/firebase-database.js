@@ -18,7 +18,7 @@ const addTask = (task, groupId) => {
   set(taskRef, {
     id: task.id,
     name: task.name,
-    completed: false,
+    checked: false,
     rating: task.rating,
     createdAt: task.createdAt,
     lastModified: task.lastModified,
@@ -31,5 +31,16 @@ const deleteTask = async (taskId, groupId) => {
   await remove(taskRef);
 }
 
+// Fonction qui permet de modifier une tache dans la base de données
+const updateTask = async (task, groupId) => {
+  const taskRef = ref(db, `tasks/${groupId}/${task.id}`);
+  await update(taskRef, {
+    name: task.name,
+    checked: task.checked,
+    rating: task.rating,
+    lastModified: task.lastModified,
+  });
+}
+
 export default db;
-export { getTasks, addTask, deleteTask };
+export { getTasks, addTask, deleteTask, updateTask };

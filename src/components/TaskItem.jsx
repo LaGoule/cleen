@@ -4,6 +4,7 @@ import { getDatabase, ref, remove } from "firebase/database";
 import { deleteTask } from '../provider/firebase-database';
 
 
+
 const TaskItem = (props) => {
     const [isEditing, setIsEditing] = useState(false);
     const [editText, setEditText] = useState(props.task.text);
@@ -14,6 +15,8 @@ const TaskItem = (props) => {
     const handleDelete = () => {
         deleteTask(props.task.firebaseKey, props.groupId);
     };
+
+    
 
     // const handleEdit = () => {
     //     setIsEditing(true);
@@ -56,13 +59,13 @@ const TaskItem = (props) => {
                     <input 
                         type="checkbox" 
                         checked={props.task.checked} 
-                        onChange={() => props.handleCheck(props.task)}
+                        onChange={() => props.onTaskToggle(props.task)}
                     />
                     <span
-                        // style={{
-                        //     textDecoration: props.task.checked ? 'line-through' : 'none',
-                        //     color: props.task.checked ? '#666' : 'white'
-                        // }}
+                        style={{
+                            textDecoration: props.task.checked ? 'line-through' : 'none',
+                            color: props.task.checked ? '#666' : 'white'
+                        }}
                     >{props.task.name}</span>
                     {/* <button className="editBtn" onClick={handleEdit} >Modifier</button> */}
                     <button className="deleteBtn" onClick={handleDelete} >×</button>

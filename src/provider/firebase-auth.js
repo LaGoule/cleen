@@ -1,15 +1,17 @@
 import app from "./firebase-app";
-import { getAuth, signOut, signInWithEmailAndPassword, sendPasswordResetEmail } from "firebase/auth";
+import { getAuth, signOut, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, GoogleAuthProvider } from "firebase/auth";
 
 const auth = getAuth(app);
+const provider = new GoogleAuthProvider();
 
-const handleLogout = async () => {
+const handleGoogleLogin = async () => {
   try {
-    await signOut(auth);
-    console.log("Signed out successfully");
+    const result = await signInWithPopup(auth, provider);
+    const user = result.user;
+    console.log("User signed in with Google", user);
   } catch (error) {
-    console.error("Error signing out", error);
-    throw error; // Lancez l'erreur pour que le code appelant puisse la gérer
+    console.error("Error signing in with Google", error);
+    throw error;
   }
 }
 
@@ -35,5 +37,15 @@ const handlePasswordReset = async (email) => {
   }
 }
 
+const handleLogout = async () => {
+  try {
+    await signOut(auth);
+    console.log("Signed out successfully");
+  } catch (error) {
+    console.error("Error signing out", error);
+    throw error; // Lancez l'erreur pour que le code appelant puisse la gérer
+  }
+}
+
 export default auth;
-export { handleLogin, handleLogout, handlePasswordReset };
+export { handleLogin, handleGoogleLogin, handleLogout, handlePasswordReset };
