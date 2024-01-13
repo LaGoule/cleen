@@ -1,8 +1,20 @@
 import app from "./firebase-app";
-import { getDatabase, ref, set, remove, update } from "firebase/database";
+import { getDatabase, ref, get, set, child, remove, update } from "firebase/database";
+import {  } from "../store/HouseholdContext";
 
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
+
+// Fonction pour obtenir le foyer d'un utilisateur
+const getHouseholdForUser = async (userId) => {
+  const userRef = ref(db, 'users/' + userId);
+  const snapshot = await get(child(userRef, 'householdId'));
+  if (snapshot.exists()) {
+    return snapshot.val();
+  } else {
+    return null;
+  }
+}
 
 // Fonction qui permet de récupérer les taches dans la base de données
 const getTasks = (groupId) => {
@@ -12,7 +24,6 @@ const getTasks = (groupId) => {
 
 // Fonction qui perment d'ajouter une tache dans la base de données
 const addTask = (task, groupId) => {
-  const db = getDatabase();
   const newTaskKey = task.id; // Utilisez l'ID de la tâche comme clé
   const taskRef = ref(db, `tasks/${groupId}/${newTaskKey}`);
   set(taskRef, {
@@ -43,4 +54,4 @@ const updateTask = async (task, groupId) => {
 }
 
 export default db;
-export { getTasks, addTask, deleteTask, updateTask };
+export { getHouseholdForUser, getTasks, addTask, deleteTask, updateTask };

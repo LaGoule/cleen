@@ -1,5 +1,6 @@
 import app from "./firebase-app";
 import { getAuth, signOut, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, GoogleAuthProvider } from "firebase/auth";
+import { getHouseholdForUser } from "./firebase-database";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
