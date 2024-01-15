@@ -1,7 +1,7 @@
 // TaskItem.jsx
 import React, { useState, useContext, useRef } from 'react';
 import { deleteTask } from '../provider/firebase-database';
-import HouseholdContext from '../store/HouseholdContext';
+import HouseholdContext from '../store/HouseholdContext.jsx';
 
 
 
@@ -51,9 +51,6 @@ const TaskItem = (props) => {
         } else {
             return (
                 <div
-                    style={{
-                        backgroundColor: props.task.checked ? '#333' : '#444',
-                    }}
                 >
                     <input 
                         type="checkbox" 
@@ -61,10 +58,7 @@ const TaskItem = (props) => {
                         onChange={() => props.onTaskToggle(props.task)}
                     />
                     <span
-                        style={{
-                            textDecoration: props.task.checked ? 'line-through' : 'none',
-                            color: props.task.checked ? '#666' : 'white'
-                        }}
+                        className={props.task.checked ? 'checked' : ''}
                     >{props.task.name}</span>
                     {/* <button className="editBtn" onClick={handleEdit} >Modifier</button> */}
                     <button className="deleteBtn" onClick={handleDelete} >×</button>

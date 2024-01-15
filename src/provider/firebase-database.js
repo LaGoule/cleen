@@ -1,9 +1,69 @@
 import app from "./firebase-app";
-import { getDatabase, ref, get, set, child, remove, update } from "firebase/database";
-import HouseholdContext from "../store/HouseholdContext";
+import { getDatabase, get, ref, set, push, remove, update } from "firebase/database";
+// import HouseholdContext from "../store/HouseholdContext.jsx";
 
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
+
+
+
+
+
+// On check si l'utilisateur a au moins un foyer attitrer
+// Si c'est le cas on récupère le premier foyer
+// Et on l'enregistre dans le contexte
+const checkAndSetHousehold = async (user, setUser, setHousehold) => {
+  const householdId = await getHouseholdForUser(user.uid);
+  if (householdId) {
+    // Récupérez les informations du foyer de la base de données
+    const householdSnapshot = await get(ref(db, 'households/' + householdId));
+    const householdData = householdSnapshot.val();
+    setHousehold(householdData);
+    setUser({ ...user, householdId });
+    // Ajoutez l'utilisateur au foyer
+    await set(ref(db, 'households/' + householdId + '/users/' + user.uid), true);
+
+    setHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
+    // updateHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
+
+    return true;
+  }
+  return false;
+}
+
+// Sinon on créer un foyer a id unique et on l'ajoute a l'utilisateur
+const createAndSetHousehold = async (user, setUser, isCreatingHousehold, setIsCreatingHousehold, setHousehold) => {
+  // Vérifiez si il n'y a pas d'utilisateur ou si un foyer est en cours de création
+  if (!user || isCreatingHousehold) {
+    return;
+  }
+
+  // Vérifiez si l'utilisateur a déjà un foyer
+  const existingHouseholdId = await getHouseholdForUser(user.uid);
+  if (existingHouseholdId) {
+    return;
+  }
+
+  // Définissez isCreatingHousehold sur true
+  setIsCreatingHousehold(true);
+  
+  const newHouseholdRef = push(ref(db, 'households'));
+  await set(newHouseholdRef, {
+    // Ajoutez d'autres propriétés du foyer si nécessaire
+    uid: newHouseholdRef.key,
+    name: "Foyer de " + user.displayName + "",
+    users: {
+      [user.uid]: true, // Ajoutez l'utilisateur au foyer
+    },
+  });
+  const householdId = newHouseholdRef.key;
+  await set(ref(db, 'users/' + user.uid + '/householdId'), householdId);
+  setUser({ ...user, householdId });
+  setHousehold({ uid: householdId, name: "Foyer de " + user.displayName + "", users: { [user.uid]: true } });
+
+  // Définissez isCreatingHousehold sur false
+  setIsCreatingHousehold(false);
+}
 
 // Fonction pour obtenir le foyer d'un utilisateur
 const getHouseholdForUser = async (userId) => {
@@ -58,6 +118,8 @@ const addTask = async (task, householdId) => {
     rating: task.rating,
     createdAt: task.createdAt,
     lastModified: task.lastModified,
+    color: task.color,
+    assignatedUser: null
   });
 }
 
@@ -79,4 +141,4 @@ const updateTask = async (task, householdId) => {
 }
 
 export default db;
-export { getHouseholdForUser, getTasks, addTask, deleteTask, updateTask };
+export { checkAndSetHousehold, createAndSetHousehold, getHouseholdForUser, getTasks, addTask, deleteTask, updateTask };

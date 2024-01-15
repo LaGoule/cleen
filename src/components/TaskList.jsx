@@ -1,6 +1,6 @@
 // TaskList.js
 import React, { useState, useContext, useEffect, useCallback } from 'react';
-import HouseholdContext from '../store/HouseholdContext';
+import HouseholdContext from '../store/HouseholdContext.jsx';
 import { ref, onValue, off } from 'firebase/database';
 import db from '../provider/firebase-database';
 
@@ -89,11 +89,12 @@ const TaskList = (props) => {
                         task.name
                             .toLowerCase()
                             .includes(filter.toLowerCase()) ? 
+                                
                                 <li 
                                     key={uuidv4()} 
                                     style={{
-                                        backgroundColor: task.checked ? '#333' : '#444',
-                                        textDecoration: task.checked ? 'line-through' : 'none'
+                                        backgroundColor: task.color,
+                                        opacity: task.checked ? '.5' : '1',
                                 }}>
                                     <TaskItem 
                                     

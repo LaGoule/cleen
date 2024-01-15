@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword  } from 'firebase/auth';
+// import { signInWithEmailAndPassword  } from 'firebase/auth';
 import auth, { handleLogin, handleGoogleLogin, handlePasswordReset } from '../provider/firebase-auth';
 import { NavLink, useNavigate } from 'react-router-dom'
 
@@ -14,6 +14,9 @@ const PageLogin = () => {
         // Récupérez l'email du localStorage lorsque le composant est monté
         const savedEmail = localStorage.getItem('email');
         if (savedEmail) setEmail(savedEmail);
+        // Récupérez le mot de passe du localStorage lorsque le composant est monté
+        const savedPassword = localStorage.getItem('password');
+        if (savedPassword) setPassword(savedPassword);
     }, []);
        
     const onLogin = async (e) => {

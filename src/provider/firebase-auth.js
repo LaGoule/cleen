@@ -1,11 +1,41 @@
-import { useState } from 'react';
-
 import app from "./firebase-app";
+import { get, ref, set } from 'firebase/database';
+import db, { checkAndSetHousehold, createAndSetHousehold } from './firebase-database';
 import { getAuth, signOut, signInWithEmailAndPassword, signInWithPopup, sendPasswordResetEmail, GoogleAuthProvider, onAuthStateChanged } from "firebase/auth";
 
 const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
+// Vérifiez si l'utilisateur a un foyer
+const checkAndCreateUser = async (user, setUser, setHousehold) => {
+  if (!user) {
+    return;
+  }
+  const userRef = ref(db, 'users/' + user.uid);
+  const snapshot = await get(userRef);
+  if (!snapshot.exists()) {
+    // Si l'utilisateur n'existe pas, créez l'utilisateur
+    await set(userRef, { 
+      uid: user.uid,
+      name: user.displayName || 'Anonymous',
+      email: user.email,
+      // Ajoutez d'autres propriétés de l'utilisateur si nécessaire
+    });
+  } else {
+    // Si l'utilisateur existe, vérifiez si le foyer existe
+    const householdRef = ref(db, 'households/' + snapshot.val().householdId);
+    const householdSnapshot = await get(householdRef);
+    if (householdSnapshot.exists()) {
+      
+      setHousehold(householdSnapshot.val());
+    } else {
+      // Si le foyer n'existe pas, créez un nouveau foyer
+      await createAndSetHousehold(user, setUser, setHousehold);
+    }
+  }
+  // Définir l'utilisateur après la création ou la vérification du foyer
+  setUser(user);
+}
 
 const handleGoogleLogin = async () => {
   try {
@@ -40,10 +70,11 @@ const handlePasswordReset = async (email) => {
   }
 }
 
-const handleLogout = async () => {
+const handleLogout = async (setHousehold) => {
   try {
     await signOut(auth);
     console.log("Signed out successfully");
+    setHousehold(null); // Réinitialisez l'état du household
   } catch (error) {
     console.error("Error signing out", error);
     throw error; // Lancez l'erreur pour que le code appelant puisse la gérer
@@ -51,4 +82,4 @@ const handleLogout = async () => {
 }
 
 export default auth;
-export { handleLogin, handleGoogleLogin, handleLogout, handlePasswordReset };
+export { handleLogin, handleGoogleLogin, handleLogout, handlePasswordReset, checkAndCreateUser };

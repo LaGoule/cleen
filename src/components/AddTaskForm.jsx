@@ -3,16 +3,18 @@ import React, { useState, useContext } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { addTask } from '../provider/firebase-database';
 import { serverTimestamp } from "firebase/database";
-import HouseholdContext from '../store/HouseholdContext';
+import HouseholdContext from '../store/HouseholdContext.jsx';
 
 
 const AddTaskForm = (props) => {
-    // const groupId = "0A1B2C3D4E5F6G7H8I9J"
     const { household } = useContext(HouseholdContext);
-    const [task, setTask] = useState({name: '', completed: false, createdAt: ''});
+    const [task, setTask] = useState({name: '', completed: false, createdAt: '', color: '#66666'});
 
     const handleSubmit = async (event) => {
         event.preventDefault();
+        if (!task.name.trim()) {
+            return;
+        }
         await addTask({
             id: uuidv4(),
             name: task.name,
@@ -20,6 +22,9 @@ const AddTaskForm = (props) => {
             rating: 1,
             createdAt: serverTimestamp(),
             lastModified: serverTimestamp(),
+            color: task.color,
+            assignatedUser: null
+
 
         }, household.uid);
         setTask({...task, name: ''});
@@ -35,6 +40,18 @@ const AddTaskForm = (props) => {
             value={task.name} 
             onChange={e => setTask({...task, name: e.target.value})}
         />
+        <select 
+            onChange={e => setTask({...task, color: e.target.value})} 
+            value={task.color} 
+            name="colorSelector" 
+            id="colorSelector"
+        >
+            <option default value="#444444">--Couleur--</option>
+            {/* <option value="#444444">Gris</option> */}
+            <option value="#EB8A90">Rouge</option>
+            <option value="#2D82B7">Bleu</option>
+            <option value="#42E2B8">Vert</option>
+        </select>
         <button
             onClick={handleSubmit}
         >Ajouter</button>

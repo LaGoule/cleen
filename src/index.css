@@ -127,6 +127,14 @@ input[type="checkbox"]{
   gap: 5px;
   flex-grow: 1;
 }
+.todoList>li>div>span{
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6);
+  width: 100%;
+}
+.todoList>li>div>.checked{
+  text-decoration: line-through;
+  opacity: .5;
+}
 .todoList>li>div>input[type="text"]{
   margin:5px;
   margin-right: 0;
@@ -162,9 +170,14 @@ input[type="checkbox"]{
   opacity: 1;
   background-color: #3dc25e;
 }
+.deleteBtn{
+  color:white;
+  background-color: #ff6464;
+}
 .deleteBtn:hover{
   opacity: 1;
-  background-color: #ff6464;
+  color: #ff6464;
+  background-color: white;
 }
 .saveBtn:hover{
   opacity: 1;
