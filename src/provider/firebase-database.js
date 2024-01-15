@@ -32,17 +32,17 @@ const checkAndSetHousehold = async (user, setUser, setHousehold) => {
 }
 
 // Sinon on créer un foyer a id unique et on l'ajoute a l'utilisateur
-const createAndSetHousehold = async (user, setUser, isCreatingHousehold, setIsCreatingHousehold, setHousehold) => {
+const createAndSetHousehold = async (user, setHousehold) => {
   // Vérifiez si il n'y a pas d'utilisateur ou si un foyer est en cours de création
-  if (!user || isCreatingHousehold) {
-    return;
-  }
+  // if (!user || isCreatingHousehold) {
+  //   return;
+  // }
 
-  // Vérifiez si l'utilisateur a déjà un foyer
-  const existingHouseholdId = await getHouseholdForUser(user.uid);
-  if (existingHouseholdId) {
-    return;
-  }
+  // // Vérifiez si l'utilisateur a déjà un foyer
+  // const existingHouseholdId = await getHouseholdForUser(user.uid);
+  // if (existingHouseholdId) {
+  //   return;
+  // }
 
   // Définissez isCreatingHousehold sur true
   setIsCreatingHousehold(true);
@@ -58,8 +58,12 @@ const createAndSetHousehold = async (user, setUser, isCreatingHousehold, setIsCr
   });
   const householdId = newHouseholdRef.key;
   await set(ref(db, 'users/' + user.uid + '/householdId'), householdId);
-  setUser({ ...user, householdId });
-  setHousehold({ uid: householdId, name: "Foyer de " + user.displayName + "", users: { [user.uid]: true } });
+  // setUser({ ...user, householdId });
+  setHousehold({ 
+    uid: householdId, 
+    name: "Foyer de " + user.displayName + "", 
+    users: { [user.uid]: true } 
+  });
 
   // Définissez isCreatingHousehold sur false
   setIsCreatingHousehold(false);
@@ -119,14 +123,8 @@ const addTask = async (task, householdId) => {
     createdAt: task.createdAt,
     lastModified: task.lastModified,
     color: task.color,
-    assignatedUser: null
+    // assignatedUser: null
   });
-}
-
-// Fonction qui permet de supprimer une tache dans la base de données
-const deleteTask = async (taskId, householdId) => {
-  const taskRef = ref(db, `tasks/${householdId}/${taskId}`);
-  await remove(taskRef);
 }
 
 // Fonction qui permet de modifier une tache dans la base de données
@@ -137,7 +135,15 @@ const updateTask = async (task, householdId) => {
     checked: task.checked,
     rating: task.rating,
     lastModified: task.lastModified,
+    color: task.color,
+    // assignatedUser: task.assignatedUser
   });
+}
+
+// Fonction qui permet de supprimer une tache dans la base de données
+const deleteTask = async (taskId, householdId) => {
+  const taskRef = ref(db, `tasks/${householdId}/${taskId}`);
+  await remove(taskRef);
 }
 
 export default db;

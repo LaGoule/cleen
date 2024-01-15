@@ -1,13 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useEffect, useState } from 'react';
 import { ref, get, update } from "firebase/database";
 import db from '../provider/firebase-database';
+import HouseholdContext from '../store/HouseholdContext';
 
 
 const PageProfile = (props) => {
 
     const [user, setUser] = useState(null);
-    const [householdId, setHouseholdId] = useState(null);
+    const { household } = useContext(HouseholdContext);
 
     const [isEditing, setIsEditing] = useState(false);
     const [newName, setNewName] = useState('');
@@ -28,36 +29,27 @@ const PageProfile = (props) => {
         setUser({ ...user, name: newName });
         setIsEditing(false);
     };
-
-    useEffect(() => {
-        const fetchUserData = async () => {
-            const userRef = ref(db, 'users/' + props.user.uid);
-            const snapshot = await get(userRef);
-            if (snapshot.exists()) {
-                setHouseholdId(snapshot.val().householdId);
-                setUser(snapshot.val());
-            }
-        };
-
-        fetchUserData();
-    }, [props.user.uid]);
     
     return (
         <>
-            <h2>Profile</h2>
 
-            {isEditing ? (
-                <form onSubmit={handleSubmit}>
-                    <input type="text" value={newName} onChange={handleNameChange} /><button type="submit">Submit</button>
-                </form>
-            ) : (
-                <>
-                    <p>Utilisateur: {user ? user.name : ''}{' '}<button onClick={handleEditClick}>Modifier</button></p>
-                </>
-            )}
+            <div className="card">
+                <h2>Profile</h2>
 
-            {/* <p>Id de l'utilisateur: {props.user.uid}</p> */}
-            <p>Id du Foyer: {householdId}</p>
+                {isEditing ? (
+                    <form onSubmit={handleSubmit}>
+                        <input type="text" value={newName} onChange={handleNameChange} /><button type="submit">Submit</button>
+                    </form>
+                ) : (
+                    <>
+                        <p>Utilisateur: {user ? user.name : ''}{' '}<button onClick={handleEditClick}>Modifier</button></p>
+                    </>
+                )}
+
+                <p>Adresse e-mail: {props.user.email}</p>
+                {/* <p>Id du Foyer: {householdId}</p> */}
+                <p>Nom du foyer: {household.name}</p>
+            </div>
         </>
     );
 }

@@ -29,54 +29,55 @@ const PageSignup = () => {const navigate = useNavigate();
 
     return (
         <>
-            <h2>Créer un compte.</h2>
-            {/* <p>Créer un compte.</p> */}
+            <div className='card'>
+                <h2>Créer un compte.</h2>
+                {/* <p>Créer un compte.</p> */}
 
-            <form>                                                                                            
-                <div>
-                    <label htmlFor="email-address">
-                        Adresse email
-                    </label>
-                    <input
-                        type="email"
-                        label="Adresse email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}  
-                        required                                    
-                        placeholder="Adresse email"                                
-                    />
-                </div>
+                <form>                                                                                            
+                    <div>
+                        <label htmlFor="email-address">
+                            Adresse email
+                        </label>
+                        <input
+                            type="email"
+                            label="Adresse email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}  
+                            required                                    
+                            placeholder="Adresse email"                                
+                        />
+                    </div>
 
-                <div>
-                    <label htmlFor="password">
-                        Mot de passe
-                    </label>
-                    <input
-                        type="password"
-                        label="Mot de passe"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)} 
-                        required                                 
-                        placeholder="Mot de passe"              
-                    />
-                </div><br/>                                       
-                        
-                <button
-                    type="submit" 
-                    onClick={onSubmit}                        
-                >  
-                    Créer un compte                  
-                </button>
-                                                                     
-            </form>
-                   
-            <p>
-                Vous possedez déjà un compte?{' '}
-                <NavLink to="/login" >
-                    Se connecter
-                </NavLink>
-            </p>     
-
+                    <div>
+                        <label htmlFor="password">
+                            Mot de passe
+                        </label>
+                        <input
+                            type="password"
+                            label="Mot de passe"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)} 
+                            required                                 
+                            placeholder="Mot de passe"              
+                        />
+                    </div><br/>                                       
+                            
+                    <button
+                        type="submit" 
+                        onClick={onSubmit}                        
+                    >  
+                        Créer un compte                  
+                    </button>
+                                                                        
+                </form>
+                    
+                <p>
+                    Vous possedez déjà un compte?{' '}
+                    <NavLink to="/login" >
+                        Se connecter
+                    </NavLink>
+                </p>     
+            </div>
         </>
     );
 }

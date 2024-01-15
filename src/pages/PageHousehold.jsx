@@ -44,20 +44,22 @@ const PageHousehold = (props) => {
 
     return (
         <>
-            <h2>Foyer</h2>
+            <div className="card">
+                <h2>Foyer</h2>
 
-            <p>Nom du foyer : {household?.name}</p>
-            <form onSubmit={handleHouseholdNameSubmit}>
-                <input type="text" value={householdName} onChange={handleHouseholdNameChange} placeholder="Nouveau nom" />
-                <button type="submit">Modifier le nom</button>
-            </form>
+                <p>Nom du foyer: {household?.name}</p>
+                <form onSubmit={handleHouseholdNameSubmit}>
+                    {/* <input type="text" value={householdName} onChange={handleHouseholdNameChange} placeholder="Nouveau nom" /> */}
+                    {/* <button type="submit">Modifier le nom</button> */}
+                </form>
 
-            <p>Id du foyer : {household?.uid}</p>
-            <form onSubmit={handleHouseholdIdSubmit}>
-                <input type="text" value={householdId} onChange={handleHouseholdIdChange} placeholder="Code du foyer" />
-                <button type="submit">Rejoindre un foyer</button>
-            </form>
-            <p>Utilisateurs : {JSON.stringify(household?.users)}</p>
+                <p>Id du foyer: {household?.uid}</p>
+                <form onSubmit={handleHouseholdIdSubmit}>
+                    <input type="text" value={householdId} onChange={handleHouseholdIdChange} placeholder="Code du foyer" />
+                    <button type="submit">Rejoindre un foyer</button>
+                </form>
+                {/* <p>Utilisateurs : {JSON.stringify(household?.users)}</p> */}
+            </div>
         </>
     );
 }

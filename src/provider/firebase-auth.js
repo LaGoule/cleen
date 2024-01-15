@@ -7,7 +7,7 @@ const auth = getAuth(app);
 const provider = new GoogleAuthProvider();
 
 // Vérifiez si l'utilisateur a un foyer
-const checkAndCreateUser = async (user, setUser, setHousehold) => {
+const checkAndCreateUser = async (user) => {
   if (!user) {
     return;
   }
@@ -21,7 +21,9 @@ const checkAndCreateUser = async (user, setUser, setHousehold) => {
       email: user.email,
       // Ajoutez d'autres propriétés de l'utilisateur si nécessaire
     });
-  } else {
+  } 
+  /*
+  else {
     // Si l'utilisateur existe, vérifiez si le foyer existe
     const householdRef = ref(db, 'households/' + snapshot.val().householdId);
     const householdSnapshot = await get(householdRef);
@@ -35,6 +37,7 @@ const checkAndCreateUser = async (user, setUser, setHousehold) => {
   }
   // Définir l'utilisateur après la création ou la vérification du foyer
   setUser(user);
+  */
 }
 
 const handleGoogleLogin = async () => {

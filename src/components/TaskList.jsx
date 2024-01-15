@@ -63,12 +63,6 @@ const TaskList = (props) => {
         }
       }
 
-
-
-
-
-
-
     let sortedTasks = sortTasks(tasks);
 
     return (
@@ -77,15 +71,13 @@ const TaskList = (props) => {
                 filter={filter} setFilter={setFilter} 
                 sort={sort} setSort={setSort} 
             />
-
-            <hr/>
             
             <ul className="todoList">
                 {
                     tasks.length === 0 ?
                     <p>Aucune tâche…</p>
                     :
-                    sortedTasks.flatMap((task, index) => (
+                    sortedTasks.flatMap((task) => (
                         task.name
                             .toLowerCase()
                             .includes(filter.toLowerCase()) ? 
@@ -93,7 +85,7 @@ const TaskList = (props) => {
                                 <li 
                                     key={uuidv4()} 
                                     style={{
-                                        backgroundColor: task.color,
+                                        background: `linear-gradient(to right, ${task.color}, white)`,
                                         opacity: task.checked ? '.5' : '1',
                                 }}>
                                     <TaskItem 

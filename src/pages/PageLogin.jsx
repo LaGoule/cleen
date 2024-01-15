@@ -40,63 +40,60 @@ const PageLogin = () => {
     
     return (
         <>
-            <h2>Connexion requise</h2>
-            {/* <p>Veuillez vous connectez.</p> */}
+            <div className="card">
+                <h2>Connexion requise</h2>
 
+                <form>                                              
+                    <div>
+                        <label htmlFor="email-address">
+                            Adresse email
+                        </label>
+                        <input
+                            id="email-address"
+                            name="email"
+                            type="email"  
+                            value={email} 
+                            required                                                                                
+                            placeholder="Adresse email"
+                            onChange={(e)=>setEmail(e.target.value)}
+                        />
+                        </div>
+                        <div>
+                            <label htmlFor="password">
+                                Mot de passe
+                            </label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"    
+                                value={password} 
+                                required                                                                                
+                                placeholder="Mot de passe"
+                                onChange={(e)=>setPassword(e.target.value)}
+                            />
+                        </div>     
+                        <div>
+                            <button                                    
+                                onClick={onLogin}                                        
+                            >      
+                                Connexion                                                                 
+                            </button>
+                        </div>                               
+                    </form>
 
-            <form>                                              
-                <div>
-                    <label htmlFor="email-address">
-                        Adresse email
-                    </label>
-                    <input
-                        id="email-address"
-                        name="email"
-                        type="email"  
-                        value={email} 
-                        required                                                                                
-                        placeholder="Adresse email"
-                        onChange={(e)=>setEmail(e.target.value)}
-                    />
-                </div>
-
-                <div>
-                    <label htmlFor="password">
-                        Mot de passe
-                    </label>
-                    <input
-                        id="password"
-                        name="password"
-                        type="password"    
-                        value={password} 
-                        required                                                                                
-                        placeholder="Mot de passe"
-                        onChange={(e)=>setPassword(e.target.value)}
-                    />
-                </div><br/>
-                                
-                <div>
-                    <button                                    
-                        onClick={onLogin}                                        
-                    >      
-                        Connexion                                                                 
-                    </button>
-                </div>                               
-            </form>
-
-            <br/><hr/><br/>
-            <button onClick={onGoogleLogin}>Se connecter avec Google</button><br/><br/>
-        
-            <p>
-                Pas encore de compte? {' '}
-                <NavLink to="/signup">
-                    Créer un compte
-                </NavLink><br/>
-                <a onClick={handlePasswordReset}>
-                    Mot de passe oublié?
-                </a>
-            </p>
-
+                    <br/><hr/><br/>
+                    <button onClick={onGoogleLogin}>Se connecter avec Google</button><br/><br/>
+                
+                    <p>
+                        Pas encore de compte? {' '}
+                        <NavLink to="/signup">
+                            Créer un compte
+                        </NavLink><br/>
+                        <a onClick={handlePasswordReset}>
+                            Mot de passe oublié?
+                        </a>
+                    </p>
+            </div>
         </>
     );
 }
