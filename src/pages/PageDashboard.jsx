@@ -1,22 +1,20 @@
-import React, { /*useState, useEffect, useContext*/ } from 'react';
-// import HouseholdContext from '../store/HouseholdContext';
-// import { onAuthStateChanged } from 'firebase/auth';
-// import auth from '../provider/firebase-auth';
-// import Clockwatch from '../components/Clockwatch';
+import React, { useState } from 'react';
 import TaskList from '../components/TaskList';
-import { Link } from 'react-router-dom';
+import AddTaskForm from '../components/AddTaskForm';
 
-
-const PageDashboard = (props) => {
-
-    const user = props.user;
-
+const PageDashboard = () => {
+    
     return (
         <>
-            <div className="card">
-                <h2>Liste des tâches</h2>
-                <TaskList />
-                {/* {user ?  : <Link to="/login">Connectez-vous!</Link>} */}
+            <div id="dashboardPage">
+                <div className="card todoListCard">
+                    <h2>Liste des tâches</h2>
+                    <TaskList />
+                </div>
+                <div className="card addTaskCard">
+                    <h2>Ajoutez une tâche</h2>
+                    <AddTaskForm />
+                </div>
             </div>
         </>
     );

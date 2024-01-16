@@ -7,8 +7,9 @@ import { onAuthStateChanged } from 'firebase/auth';
 import auth, { checkAndCreateUser } from './provider/firebase-auth';
 import { HouseholdProvider } from './store/HouseholdContext';
 
-// import NavigationMenu from './components/NavigationMenu';
+import LoadingSpinner from './components/LoadingSpinner';
 import MainSidebar from './components/MainSidebar';
+
 import Page404 from './pages/Page404';
 import PageLogin from './pages/PageLogin';
 import PageSignup from './pages/PageSignup';
@@ -38,32 +39,29 @@ function App() {
     return () => unsubscribe();
   }, []);
 
-  //Ecran de chargement -> A remplacer par un spinner
+  //Ecran de chargement 
   if (isLoading) {
-    return <div>Chargement...</div>; 
+    return <LoadingSpinner />; 
   }
 
-  return ( // refactorer au propre
-    <>
+  return (
     <HouseholdProvider user={user} >
-          { user ? 
-            <MainSidebar user={user} />
-          :
-            <></>
-          }
-          <main>
-            <Routes>
-              <Route path="/" element={user ? <PageDashboard user={user} /> : <PageLogin />} />
-              <Route path="/login" element={<PageLogin />} />
-              <Route path="/signup" element={<PageSignup />} />
-              <Route path="/home" element={user ? <PageDashboard /> : <PageLogin />} />
-              <Route path="/profile" element={user ? <PageProfile user={user} /> : <PageLogin />} />
-              <Route path="/household" element={user ? <PageHousehold user={user} /> : <PageLogin />} />
-              <Route path="*" element={<Page404 />} />
-            </Routes>
-          </main>
-      </HouseholdProvider>
-    </>
+      { user ? 
+        <MainSidebar user={user} />
+        : <></>
+      }
+      <main>
+        <Routes>
+          <Route path="/" element={user ? <PageDashboard user={user} /> : <PageLogin />} />
+          <Route path="/login" element={<PageLogin />} />
+          <Route path="/signup" element={<PageSignup />} />
+          <Route path="/home" element={user ? <PageDashboard /> : <PageLogin />} />
+          <Route path="/profile" element={user ? <PageProfile user={user} /> : <PageLogin />} />
+          <Route path="/household" element={user ? <PageHousehold user={user} /> : <PageLogin />} />
+          <Route path="*" element={<Page404 />} />
+        </Routes>
+      </main>
+    </HouseholdProvider>
   )
 }
 

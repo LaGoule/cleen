@@ -89,7 +89,7 @@ const TaskItem = (props) => {
                         className={props.task.checked ? 'checked' : ''}
                     >{props.task.name}</span>
                     <em className='rating'>{printRating()}</em>
-                    <button className="editBtn" onClick={handleEdit}>modifier</button>
+                    {/* <button className="editBtn" onClick={handleEdit}>modifier</button> */}
                     <button className="deleteBtn" onClick={handleDelete} >×</button>
                 </div>
             );

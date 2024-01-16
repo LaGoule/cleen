@@ -1,6 +1,5 @@
-import React, { useContext } from 'react';
-import { useEffect, useState } from 'react';
-import { ref, get, update } from "firebase/database";
+import React, { useContext, useEffect, useState } from 'react';
+import { onValue, ref, update } from "firebase/database";
 import db from '../provider/firebase-database';
 import HouseholdContext from '../store/HouseholdContext';
 
@@ -29,10 +28,23 @@ const PageProfile = (props) => {
         setUser({ ...user, name: newName });
         setIsEditing(false);
     };
+
+    useEffect(() => {
+        const userRef = ref(db, 'users/' + props.user.uid);
+    
+        const unsubscribe = onValue(userRef, (snapshot) => {
+            const data = snapshot.val();
+            setUser(data);
+        }, {
+            onlyOnce: true,
+        });
+    
+        // Nettoyer l'abonnement lors du démontage du composant
+        return () => unsubscribe();
+    }, [db, props.user.uid]);
     
     return (
         <>
-
             <div className="card">
                 <h2>Profile</h2>
 

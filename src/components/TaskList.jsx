@@ -1,40 +1,25 @@
 // TaskList.js
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import HouseholdContext from '../store/HouseholdContext.jsx';
-import { ref, onValue, off } from 'firebase/database';
+import { ref, onValue, off, set } from 'firebase/database';
 import db from '../provider/firebase-database';
 
 import { v4 as uuidv4 } from 'uuid';
 import { getTasks, updateTask } from '../provider/firebase-database';
 
+import LoadingSpinner from './LoadingSpinner';
 import AddTaskForm from './AddTaskForm';
 import SearchFilter from './SearchFilter';
 import TaskItem from './TaskItem';
 
 
-const TaskList = (props) => {
+const TaskList = () => {
     const { household } = useContext(HouseholdContext);
 
     const [tasks, setTasks] = useState([]);
     const [sort, setSort] = useState(false);
     const [filter, setFilter] = useState('');
-
-    useEffect(() => {
-        const tasksRef = ref(db, 'tasks/' + household.uid);
-        const fetchTasks = onValue(tasksRef, (snapshot) => {
-            const data = snapshot.val();
-            const taskList = [];
-            for(let id in data) {
-                taskList.push({ firebaseKey: id, ...data[id] });
-            }
-            setTasks(taskList);
-        });
-    
-        return () => {
-            // Arrêtez d'écouter les mises à jour lorsque le composant est démonté
-            off(tasksRef, fetchTasks);
-        };
-    }, [household.uid]);
+    const [isLoading, setIsLoading] = useState(true);
 
     const sortTasks = useCallback((tasks) => {
         let sortedTasks = [...tasks];
@@ -61,9 +46,35 @@ const TaskList = (props) => {
         } catch (error) {
           console.error("Error updating task", error);
         }
-      }
-
+    }
     let sortedTasks = sortTasks(tasks);
+
+
+    useEffect(() => {
+        const tasksRef = ref(db, 'tasks/' + household.uid);
+        const fetchTasks = onValue(tasksRef, (snapshot) => {
+            const data = snapshot.val();
+            const taskList = [];
+            for(let id in data) {
+                taskList.push({ firebaseKey: id, ...data[id] });
+            }
+            setTasks(taskList);
+            setIsLoading(false); 
+        });
+        
+        return () => {
+            // Arrêtez d'écouter les mises à jour lorsque le composant est démonté
+            off(tasksRef, fetchTasks);
+        };
+
+            setIsLoading(false); 
+
+    }, [household.uid]);
+
+    // //Ecran de chargement 
+    // if (isLoading) {
+    //     return <LoadingSpinner />; 
+    // }
 
     return (
         <>
@@ -74,8 +85,10 @@ const TaskList = (props) => {
             
             <ul className="todoList">
                 {
-                    tasks.length === 0 ?
-                    <p>Aucune tâche…</p>
+                    isLoading ? 
+                        <p>Chargement</p>
+                    : tasks.length === 0 ?
+                        <p>Aucune tâche…</p>
                     :
                     sortedTasks.flatMap((task) => (
                         task.name
@@ -86,10 +99,10 @@ const TaskList = (props) => {
                                     key={uuidv4()} 
                                     style={{
                                         background: `linear-gradient(to right, ${task.color}, white)`,
-                                        opacity: task.checked ? '.5' : '1',
+                                        opacity: task.checked ? '.3' : '1',
                                 }}>
                                     <TaskItem 
-                                    
+
                                         task={task}
                                         onTaskToggle={handleTaskToggle}
                                         setTasks={setTasks}
@@ -101,8 +114,6 @@ const TaskList = (props) => {
                     ))
                 }
             </ul>
-
-            <AddTaskForm setTasks={setTasks} tasks={tasks} />
         </>
     );
 };

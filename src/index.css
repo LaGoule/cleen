@@ -2,10 +2,11 @@
   /* variables */
   --color-black: #333;
   --color-darkgrey: #555;
-  --color-lightgrey: #aaa;
+  --color-lightgrey: #d0d0d0;
   --color-cleargrey: #eee;
   --color-highlight-main: #646cff;
-  --color-highlight-secondary: #535bf2; 
+  --color-highlight-secondary: #4c53d1; 
+  --color-highlight-clear: #e6e7ff;
   --color-negative: #ff6464;
   --color-positive: #42E2B8;
   --color-alternative: gold;
@@ -25,14 +26,49 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Animations Spinner Colin Howeth */
+#loading-bar-spinner.spinner {
+  left: 50%;
+  margin-left: -20px;
+  top: 50%;
+  margin-top: -20px;
+  position: absolute;
+  z-index: 19 !important;
+  animation: loading-bar-spinner 400ms linear infinite;
+}
+
+#loading-bar-spinner.spinner .spinner-icon {
+  width: 80px;
+  height: 80px;
+  border:  solid 4px transparent;
+  border-top-color:  var(--color-highlight-main) !important;
+  border-left-color: var(--color-highlight-main) !important;
+  border-radius: 50%;
+}
+
+@keyframes loading-bar-spinner {
+0%   { transform: rotate(0deg);   transform: rotate(0deg); }
+100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+
+
+
+
+
+
 body {
   margin: 0;
   display: flex;
   min-width: 320px;
   min-height: 100vh;
   gap:5px;
+}
 
-
+header>h1,
+header>nav,
+header>nav>ul{
+  margin: 0;
 }
 
 #root {
@@ -41,28 +77,101 @@ body {
   width: 100vw;
 }
 
-#root>aside {
+aside>header{
   display: flex;
   flex-direction: column;
-  gap: 5px;
-  padding: 10px 0;
-  background-color: white;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-
-  min-width: 200px;
-  align-items: flex-start;
-}
-#root>aside>header{
+  flex-grow: 1;
+  gap:0;
   width: 100%;
-  gap:20px;
-  margin-top:5px;
+}
+header>#main-logo{
+  border-bottom: 1px solid var(--color-cleargrey);
+  padding:20px 0;
+}
+header>#main-logo .broom-logo{
+  color: var(--color-highlight-main);
+  position: relative;
+  top:2.5px;
+  right:2px;
+}
+header>nav{
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex: 1;
+}
+header>nav>ul{
+  flex-grow: 1;
+  display: flex;
+  flex-flow: column nowrap;
+  justify-self: flex-end;
+}
+aside>header>nav>p{
+  color: var(--color-darkgrey);
+  font-size: 1em;
+  font-weight: 400;
+  text-align: left;
+  padding:20px;
+  padding-bottom: 0;
+  margin-bottom: 12px;
+}
+aside>header>nav>p .username{
+  color: var(--color-highlight-main);
+}
+header>nav>.householdSelector{
+  /* outline: none; */
+  /* color: var(--color-positive); */
+  font-size:.9em;
+  margin: 20px 15px 20px;
+  flex-grow: 0;
+}
+header>nav>.householdSelector:hover{
+  box-shadow:none;
+}
+header>nav>ul>li:last-child{
+  border-top: 1px solid var(--color-cleargrey);
+
+  margin-top: auto;
+  /* position:absolute;
+  bottom:0; */
+}
+header>nav>ul>li>a{
+  display: flex;
+  align-items: center;
+  justify-content: stretch;
+  gap: 10px;
+  color: var(--color-black);
+  text-align: left;
+  border-left: none;
+  border-right: none;
+  padding: 10px 10px 10px 15px;
+  transition: background-color 0.3s ease;
+}
+header>nav>ul>li>a.active {
+  color: var(--color-highlight-main);
+}
+header>nav>ul>li>a:hover{
+  background-color: var(--color-highlight-clear);
+  color: var(--color-highlight-main);
+}
+header>nav>ul>li>a>svg{
+  color: var(--color-darkgrey);
+  /* transition: color 0.3s ease; */
+}
+header>nav>ul>li>a.active>svg,
+header>nav>ul>li>a:hover>svg{
+  color: var(--color-highlight-main);
+}
+
+header>nav>ul>.divider{
+  /* flex: 1; */
 }
 
 #root>main {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  padding: 10px;
+  padding: 20px;
 
   flex-grow: 1;
   align-items: center;
@@ -92,7 +201,7 @@ a:hover {
 
 hr{
   border:none;
-  border-bottom: 1px solid var(--color-lightgrey);
+  border-bottom: 1px solid var(--color-cleargrey);
 }
 
 h1 {
@@ -100,23 +209,33 @@ h1 {
   font-weight: 200;
   line-height: 1.1;
 }
+h1 a{
+  color: var(--color-black);
+  font-weight: 200;
+}
+h1 a:hover{
+  color: var(--color-highlight-main);
+}
 
 button {
   border-radius: 999em;
   border: 1px solid transparent;
-  padding: 7px 20px;
+  padding: 5.5px 16px;
   font-size: 1em;
   font-weight: 500;
   font-family: inherit;
-  color: var(--color-highlight-main);
   cursor: pointer;
   transition: border-color 0.25s;
+
+  color: white;
+  background-color: var(--color-highlight-main);
 }
 button:hover {
-  color: white;
+  /* color: var(--color-highlight-main); */
+  background-color: var(--color-highlight-secondary);
 }
 button:active {
-  outline: 1px solid var(--color-highlight-main);
+  outline: 2px solid var(--color-highlight-main);
 }
 
 ul{
@@ -124,64 +243,7 @@ ul{
   padding-left: 0;
 }
 
-aside>header{
-  display: flex;
-  flex-direction: column;
-  gap:10px;
 
-  height:100%;
-}
-
-header>h1,
-header>nav,
-header>nav>ul{
-  margin: 0;
-}
-
-header>nav{
-  height: 100%;
-}
-
-header>nav>ul{
-  display: flex;
-  flex-direction: column;
-  justify-content: stretch;
-  gap: -1px;
-
-  height: 100%;
-}
-header>nav>ul>li:first-child{
-  border-top: 1px solid var(--color-cleargrey);
-}
-header>nav>ul>li:last-child{
-  border-top: 1px solid var(--color-cleargrey);
-}
-header>nav>ul>li>a{
-  display: flex;
-  align-items: stretch;
-  justify-content: stretch;
-  gap: 5px;
-
-  color: var(--color-darkgrey);
-  text-align: left;
-  /* border: 1px solid var(--color-cleargrey); */
-  border-left: none;
-  border-right: none;
-
-  padding: 10px 10px;
-}
-header>nav>ul>li>a>b{
-  display: block;
-  height:14px; width: 14px;
-  background: #333;
-}
-header>nav>ul>li>a:hover{
-  background-color: var(--color-cleargrey);
-}
-
-header>nav>ul>.divider{
-  height:100%;
-}
 
 h2{
   color: var(--color-darkgrey);
@@ -204,35 +266,44 @@ label{
 
 input,
 select{
-  height:20px;
+  height:22px;
   color: var(--color-black);
   font-size: 1em;
   padding: 5px 10px;
   flex-grow: 1;
+  flex-shrink: 1;
   outline: 1px solid var(--color-cleargrey);
   border:none;
   border-radius: 3px;
 }
-
 select{
   cursor: pointer;
-  height: 30px;
-  border-right: 8px solid transparent
+  height: 32px;
+  border-right: 8px solid transparent;
+  
 }
-
+input:hover,
+select:hover{
+  outline: 1px solid var(--color-highlight-clear);
+  box-shadow: 0 0 4px rgba(100, 108, 255, 0.5);
+}
 input:focus{
   opacity: 1;
   outline: 2px solid var(--color-highlight-main);
+}
+input::placeholder{
+  color: #aaa;
 }
 
 input[type="checkbox"]{
   flex-grow: 0;
   cursor: pointer;
   outline: none;
+  box-shadow: none;
 }
 
 .todoList{
-  padding: 20px 0;
+  padding: 20px 0 0;
 
   display: flex;
   flex-direction: column;
@@ -247,11 +318,15 @@ input[type="checkbox"]{
   background-color: white;
   padding:6px 8px;
   border-radius: 10px;
-  box-shadow: 0 0 3px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
+  transition: box-shadow 0.3s ease;
 }
 .todoList>li:hover{
   cursor: pointer;
-  box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.3);
+  /* outline: 1px solid var(--color-highlight-main); */
+  box-shadow: 0 0 4px 0 rgba(108, 100, 255, 0.7);
+  color: var(--color-highlight-secondary);
+  transition: box-shadow 0.2s ease-out;
 }
 .todoList>li>div{
   display: flex;
@@ -260,7 +335,8 @@ input[type="checkbox"]{
   flex-grow: 1;
 }
 .todoList>li>div>span{
-  /* text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6); */
+  color: var(--color-black);
+  font-weight: 600;
   width: 100%;
 }
 .todoList>li>div>.checked{
@@ -278,6 +354,7 @@ input[type="checkbox"]{
   justify-content: stretch;
   flex-shrink: 1;
   gap: 0.5em;
+  flex-flow: row wrap;
 }
 
 .rating{
@@ -299,7 +376,7 @@ input[type="checkbox"]{
   color:  var(--color-lightgrey);
 }
 #ratingSelector{
-  color: var(--color-alternative);
+  /* color: var(--color-alternative); */
 }
 
 .deleteBtn,
@@ -322,6 +399,7 @@ input[type="checkbox"]{
   margin-left: auto;
 }
 .editBtn:hover{
+  color:white;
   opacity: 1;
   background-color: var(--color-positive);
 }
@@ -349,4 +427,56 @@ input[type="checkbox"]{
   button {
     background-color: var(--color-highlight-main);
   }
+}
+
+
+
+
+
+
+
+/* Elements & Pages */
+
+#root>aside {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: stretch;
+  gap: 5px;
+  padding: 0;
+  background-color: white;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+
+  width:25%;
+  min-width: 200px;
+  max-width: 300px;
+
+  height: 100vh;
+  position: sticky;
+  top:0;
+}
+#root>aside>header{
+  position: sticky;
+  top:0;
+  height:100vh;
+}
+#dashboardPage{
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-start;
+  gap: 10px;
+  width: 100%;
+}
+#dashboardPage>.card{
+  width: 45%;
+}
+#dashboardPage>.todoListCard{
+  width: auto;
+}
+#dashboardPage>.addTaskCard{
+  width:40%;
+  max-width: 300px;
+  position: sticky;
+  top:20px;
 }
