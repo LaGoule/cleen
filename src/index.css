@@ -71,6 +71,12 @@ header>nav>ul{
   margin: 0;
 }
 
+h4{
+  margin: 0;
+  font-weight: 300;
+  text-align: left;
+}
+
 #root {
   display: flex;
   flex-direction: row;
@@ -200,8 +206,13 @@ a:hover {
 }
 
 hr{
-  border:none;
-  border-bottom: 1px solid var(--color-cleargrey);
+  border: 0;
+  clear:both;
+  display:block;
+  width: 100%;               
+  background-color: var(--color-cleargrey);
+  height: 1px;
+  margin: 20px 0;
 }
 
 h1 {
@@ -309,7 +320,7 @@ input[type="checkbox"]{
   flex-direction: column;
   gap:5px;
 }
-.todoList>li{
+.taskItem{
   text-align: left;
   display: flex;
   align-items: center;
@@ -321,32 +332,39 @@ input[type="checkbox"]{
   box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
   transition: box-shadow 0.3s ease;
 }
-.todoList>li:hover{
+.todoList .taskItem:hover{
   cursor: pointer;
-  /* outline: 1px solid var(--color-highlight-main); */
-  box-shadow: 0 0 4px 0 rgba(108, 100, 255, 0.7);
+  
+  box-shadow: 0 0 3px 1px rgba(76, 83, 209, 0.5);
   color: var(--color-highlight-secondary);
   transition: box-shadow 0.2s ease-out;
 }
-.todoList>li>div{
+.taskItem{
   display: flex;
   align-items: center;
   gap: 5px;
   flex-grow: 1;
 }
-.todoList>li>div>span{
+.taskItem>.taskName{
   color: var(--color-black);
   font-weight: 600;
+  line-height: 1.1;
   width: 100%;
+
+  display: inline-block;
+  margin: 5px 10px;
+  max-width: 240px;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
-.todoList>li>div>.checked{
+.taskItem .checked{
   text-decoration: line-through;
   opacity: .5;
 }
-.todoList>li>div>input[type="text"]{
+/* .todoList>li>div>input[type="text"]{
   margin:5px;
   margin-right: 0;
-}
+} */
 
 .formGroup{
   display: flex;
@@ -357,9 +375,11 @@ input[type="checkbox"]{
   flex-flow: row wrap;
 }
 
-.rating{
+.taskItem .ratingTag{
+  min-width: 45px;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap:1px;
   color: white;
   font-size: .9em;
@@ -369,14 +389,8 @@ input[type="checkbox"]{
   margin-right:5px;
 
   border-radius: 4px;
-}
-.rating .star-yellow{
-}
-.rating .star-gray{
-  color:  var(--color-lightgrey);
-}
-#ratingSelector{
-  /* color: var(--color-alternative); */
+  font-weight: 600;
+  font-size: .9em;
 }
 
 .deleteBtn,
@@ -473,10 +487,75 @@ input[type="checkbox"]{
 }
 #dashboardPage>.todoListCard{
   width: auto;
+  min-width: 300px;
 }
-#dashboardPage>.addTaskCard{
+#dashboardPage>.taskFormCard{
   width:40%;
   max-width: 300px;
   position: sticky;
   top:20px;
+}
+#popupWrapper{
+  position: fixed;
+  top:0;
+  left:0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,.5);
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#popupWrapper>.card{
+  max-width: 40%;
+  min-width: 240px;
+  position: relative;
+}
+#popupWrapper .closeButton{
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  color: var(--color-negative);
+  cursor: pointer;
+  padding:5px;
+
+  line-height: 0;
+  border-radius: 999em;
+}
+#popupWrapper .closeButton:hover{
+  background-color: var(--color-negative);
+  color: white;
+}
+#popupWrapper .closeButton svg{
+  width: 20px;
+  height: 20px;
+}
+
+
+
+/* Inputs */
+.hasIconRight{
+  display: flex;
+  position: relative;
+  flex-grow: 1;
+}
+
+.hasIconRight input {
+  font-size: 1rem;
+  width: 100%;
+  text-overflow: ellipsis;
+}
+
+.hasIconRight svg{
+  position: absolute;
+  right: 9px;
+  top: 8.5px;
+  width: 14px;
+  height: 14px;
+
+  color: var(--color-lightgrey);
+}
+.hasIconRight input:focus + svg{
+  color: var(--color-highlight-main);
 }

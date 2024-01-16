@@ -35,7 +35,7 @@ export const HouseholdProvider = ({ children, user }) => {
             setHousehold({});
             return;
         };
-        const householdRef = ref(db, 'households/' + updatedHousehold.uid);
+        const householdRef = ref(db, 'households/' + updatedHousehold.id);
         await set(householdRef, updatedHousehold);
         setHousehold(updatedHousehold);
     };

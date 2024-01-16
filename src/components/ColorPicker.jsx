@@ -19,7 +19,7 @@ const ColorPicker = (props) => {
         <>
             <select 
                 onChange={handleChange} 
-                value={props.task.color} 
+                value={props.defaultColor} 
                 name="colorSelector" 
                 className="colorSelector"
             >
@@ -27,7 +27,7 @@ const ColorPicker = (props) => {
                     <option 
                         key={color.name}
                         value={color.value}>
-                            {color.name}
+                            {color.name} 
                     </option>
                 ))}
             </select>

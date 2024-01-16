@@ -7,7 +7,7 @@ import { CheckCircle, House, UserCircle, SignOut } from "@phosphor-icons/react";
 const NavigationMenu = (props) => {
 
     const iconSize = 20;
-    const { updateHousehold } = useContext(HouseholdProvider);
+    const { household, updateHousehold } = useContext(HouseholdProvider);
 
     const logout = (e) => {
         e.preventDefault();
@@ -18,11 +18,11 @@ const NavigationMenu = (props) => {
         <>
             { props.user ?
                 <nav>
-                    {/* <p>Bienvenue <span className="username">{props.userData.name ? props.userData.name : 'Anonyme'}</span></p> */}
+                    <p>Bienvenue <span className="username">{props.userData.name ? props.userData.name : 'Anonyme'}</span></p>
 
                     <select className="householdSelector" name="" id="">
-                        <option value="">Maison de Léo</option>
-                        <option value=""></option>
+                        <option value={household.id}>{household.name}</option>
+                        <option value="">+ Nouveau foyer</option>
                     </select>
 
                     <ul>

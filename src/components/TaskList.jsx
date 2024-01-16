@@ -2,20 +2,16 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react';
 import HouseholdContext from '../store/HouseholdContext.jsx';
 import { ref, onValue, off, set } from 'firebase/database';
-import db from '../provider/firebase-database';
+import db, { updateTask } from '../provider/firebase-database';
 
-import { v4 as uuidv4 } from 'uuid';
-import { getTasks, updateTask } from '../provider/firebase-database';
-
-import LoadingSpinner from './LoadingSpinner';
-import AddTaskForm from './AddTaskForm';
+import FilteredTaskList from './FilteredTaskList.jsx';
 import SearchFilter from './SearchFilter';
 import TaskItem from './TaskItem';
 
 
-const TaskList = () => {
-    const { household } = useContext(HouseholdContext);
+const TaskList = (props) => {
 
+    const { household } = useContext(HouseholdContext);
     const [tasks, setTasks] = useState([]);
     const [sort, setSort] = useState(false);
     const [filter, setFilter] = useState('');
@@ -31,6 +27,9 @@ const TaskList = () => {
             case 'added':
                 sortedTasks.sort((a, b) => a.createdAt - b.createdAt);
                 break;
+            case 'rating':
+                sortedTasks.sort((a, b) => b.rating - a.rating);
+                break;
         }
         return sortedTasks;
     }, [sort]);
@@ -41,7 +40,7 @@ const TaskList = () => {
     
         // Mettez à jour la tâche dans Firebase
         try {
-          await updateTask(updatedTask, household.uid);
+          await updateTask(updatedTask, household.id);
           console.log("Task updated successfully");
         } catch (error) {
           console.error("Error updating task", error);
@@ -51,7 +50,7 @@ const TaskList = () => {
 
 
     useEffect(() => {
-        const tasksRef = ref(db, 'tasks/' + household.uid);
+        const tasksRef = ref(db, 'tasks/' + household.id);
         const fetchTasks = onValue(tasksRef, (snapshot) => {
             const data = snapshot.val();
             const taskList = [];
@@ -66,15 +65,12 @@ const TaskList = () => {
             // Arrêtez d'écouter les mises à jour lorsque le composant est démonté
             off(tasksRef, fetchTasks);
         };
+    }, [household.id]);
 
-            setIsLoading(false); 
 
-    }, [household.uid]);
+    const completedTasks = sortedTasks.filter(task => task.checked);
+    const incompleteTasks = sortedTasks.filter(task => !task.checked);
 
-    // //Ecran de chargement 
-    // if (isLoading) {
-    //     return <LoadingSpinner />; 
-    // }
 
     return (
         <>
@@ -85,33 +81,36 @@ const TaskList = () => {
             
             <ul className="todoList">
                 {
-                    isLoading ? 
-                        <p>Chargement</p>
-                    : tasks.length === 0 ?
+                    tasks.length === 0 ?
                         <p>Aucune tâche…</p>
                     :
-                    sortedTasks.flatMap((task) => (
-                        task.name
-                            .toLowerCase()
-                            .includes(filter.toLowerCase()) ? 
-                                
-                                <li 
-                                    key={uuidv4()} 
-                                    style={{
-                                        background: `linear-gradient(to right, ${task.color}, white)`,
-                                        opacity: task.checked ? '.3' : '1',
-                                }}>
-                                    <TaskItem 
+                    <>
+                        {/* <h4>À faire</h4> */}
+                        <FilteredTaskList 
+                            tasks={incompleteTasks}
+                            filter={filter}
+                            handleTaskToggle={handleTaskToggle}
+                            setTasks={setTasks}
+                            setIsEditing={props.setIsEditing}
+                            setTaskToUpdate={props.setTaskToUpdate}
+                        />
+                        {
+                            completedTasks.length === 0 ? null :
+                            <>
+                                <hr/>
 
-                                        task={task}
-                                        onTaskToggle={handleTaskToggle}
-                                        setTasks={setTasks}
-                                        tasks={tasks}
-                                    />
-                                </li>
-                            :
-                                []
-                    ))
+                                {/* <h4>Tâches terminées</h4> */}
+                                <FilteredTaskList 
+                                    tasks={completedTasks}
+                                    filter={filter}
+                                    handleTaskToggle={handleTaskToggle}
+                                    setTasks={setTasks}
+                                    setIsEditing={props.setIsEditing}
+                                    setTaskToUpdate={props.setTaskToUpdate}
+                                />
+                            </>
+                        }
+                    </>
                 }
             </ul>
         </>

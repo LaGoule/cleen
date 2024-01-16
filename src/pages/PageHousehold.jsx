@@ -15,7 +15,7 @@ const PageHousehold = (props) => {
 
     const handleHouseholdNameSubmit = async (event) => {
         event.preventDefault();
-        await set(ref(db, 'households/' + household.uid + '/name'), householdName);
+        await set(ref(db, 'households/' + household.id + '/name'), householdName);
         updateHousehold({ ...household, name: householdName });
         setHouseholdName('');
     };
@@ -53,9 +53,9 @@ const PageHousehold = (props) => {
                     {/* <button type="submit">Modifier le nom</button> */}
                 </form>
 
-                <p>Id du foyer: {household?.uid}</p>
+                <p>Id du foyer: {household?.id}</p>
                 <form onSubmit={handleHouseholdIdSubmit}>
-                    <input type="text" value={householdId} onChange={handleHouseholdIdChange} placeholder="Code du foyer" />
+                    <input type="text" value={householdId} onChange={handleHouseholdIdChange} placeholder="Code du foyer à rejoindre" />
                     <button type="submit">Rejoindre un foyer</button>
                 </form>
                 {/* <p>Utilisateurs : {JSON.stringify(household?.users)}</p> */}

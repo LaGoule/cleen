@@ -4,99 +4,64 @@ import { ref, set, update } from "firebase/database";
 import db, { updateTask, deleteTask } from '../provider/firebase-database';
 import HouseholdContext from '../store/HouseholdContext.jsx';
 
+import RatingTag from './RatingTag.jsx';
+
 
 
 const TaskItem = (props) => {
     const { household } = useContext(HouseholdContext);
-    const [isEditing, setIsEditing] = useState(false);
-
-    const [editText, setEditText] = useState(props.task.text);
-    const editInput = useRef();
-
-    const [editedTask, setEditedTask] = useState({
-        id: props.task.id,
-        name: props.task.name, 
-        checked: props.task.checked,
-        rating: props.task.rating,
-        createdAt: props.task.createdAt,
-        lastModified: props.task.lastModified,
-        color: props.task.color
-
-    });
-
-
 
     //Fonction pour supprimer une tâche
     const handleDelete = () => {
-        deleteTask(props.task.firebaseKey, household.uid);
+        deleteTask(props.task.firebaseKey, household.id);
     };
 
     const handleEdit = () => {
-        setIsEditing(true);
-        setEditedTask(prevState => ({ ...prevState, name: props.task.name }));
-        setTimeout(() => editInput.current.focus(), 0);
+        props.setIsEditing(true);
+        props.setTaskToUpdate(props.task);
     };
 
-    const handleSave = async () => {
-        setIsEditing(false);
-        if (editedTask.name.trim().length === 0) {
-            return;
-        }
-        const newTasks = props.tasks.map(task =>
-            task.uid === props.task.uid ? editedTask : task
-        );
-        props.setTasks(newTasks);
-    
-        // Update the task in the database
-        await updateTask(editedTask, household.uid); // replace householdId with the actual id
-    };
+    // const printRating = () => {
+    //     let rating = [];
+    //     for (let i = 0; i < 3; i++) {
+    //       if (i < ) {
+    //         rating.push(<span key={i} className="star-yellow">★</span>);
+    //       } else {
+    //         // rating.push(<span key={i} className="star-gray">★</span>);
+    //       }
+    //     }
+    //     return rating;
+    // }
 
-    const handleTextChange = (event) => {
-        setEditText(event.target.value);
-    };
+    return (
+        <>
+            <li
+                onClick={(e) => {
+                    if (e.target.tagName === 'INPUT') return;
+                    handleEdit();
+                }}
+                className='taskItem'
+                key={props.task.id} 
+                style={{
+                    background: `linear-gradient(to right, ${props.task.color}, white)`,
+                    opacity: props.task.checked ? '.3' : '1',
+            }}>
+                <input 
+                    type="checkbox" 
+                    checked={props.task.checked} 
+                    onChange={() => props.onTaskToggle(props.task)}
+                />
+                <span
+                    className={props.task.checked ? 'checked taskName' : 'taskName'}
+                >{props.task.name}</span>
 
-    const printRating = () => {
-        let rating = [];
-        for (let i = 0; i < 3; i++) {
-          if (i < props.task.rating) {
-            rating.push(<span key={i} className="star-yellow">★</span>);
-          } else {
-            // rating.push(<span key={i} className="star-gray">★</span>);
-          }
-        }
-        return rating;
-      }
+                {/* <em className='rating'>{printRating()}</em> */}
+                <RatingTag rating={props.task.rating} />
 
-    const renderTask = () => {
-        if (isEditing) {
-            return (
-                <div
-                >
-                    <input type="text" ref={editInput} value={editedTask.name} onChange={handleTextChange} />
-                    <button className="saveBtn" onClick={handleSave}>Enregistrer</button>
-                </div>
-            );
-        } else {
-            return (
-                <div
-                >
-                    <input 
-                        type="checkbox" 
-                        checked={props.task.checked} 
-                        onChange={() => props.onTaskToggle(props.task)}
-                    />
-                    <span
-                        className={props.task.checked ? 'checked' : ''}
-                    >{props.task.name}</span>
-                    <em className='rating'>{printRating()}</em>
-                    {/* <button className="editBtn" onClick={handleEdit}>modifier</button> */}
-                    <button className="deleteBtn" onClick={handleDelete} >×</button>
-                </div>
-            );
-        }
-    };
-
-    return renderTask();
+                <button className="deleteBtn" onClick={handleDelete} >×</button>
+            </li>
+        </>
+    );
 };
 
 export default TaskItem;

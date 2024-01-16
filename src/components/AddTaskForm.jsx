@@ -13,7 +13,7 @@ const AddTaskForm = () => {
     const { household } = useContext(HouseholdContext);
     const [task, setTask] = useState({
         name: '', 
-        completed: false, 
+        checked: false, 
         rating: 1,
         color: '#fff'
     });
@@ -55,7 +55,7 @@ const AddTaskForm = () => {
         await addTask({
             id: uuidv4(),
             name: task.name,
-            completed: false,
+            checked: false,
             rating: task.rating,
             createdAt: serverTimestamp(),
             lastModified: serverTimestamp(),
@@ -63,7 +63,6 @@ const AddTaskForm = () => {
             // assignatedUser: null
         }, household.uid);
         setTask({...task, name: ''});
-        // console.log('Création dune tâche: '+task.name+' dans le foyer: '+household.uid);
       }
 
     useEffect(() => {
@@ -79,7 +78,7 @@ const AddTaskForm = () => {
             value={task.name} 
             onChange={e => setTask({...task, name: e.target.value})}
         />
-        <ColorPicker task={task} setTask={setTask} />
+        <ColorPicker task={task} setTask={setTask} defaultColor={''} />
         <RatingPicker task={task} setTask={setTask} />
 
         <button
