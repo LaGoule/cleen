@@ -21,42 +21,32 @@ const TaskItem = (props) => {
         props.setTaskToUpdate(props.task);
     };
 
-    // const printRating = () => {
-    //     let rating = [];
-    //     for (let i = 0; i < 3; i++) {
-    //       if (i < ) {
-    //         rating.push(<span key={i} className="star-yellow">★</span>);
-    //       } else {
-    //         // rating.push(<span key={i} className="star-gray">★</span>);
-    //       }
-    //     }
-    //     return rating;
-    // }
-
     return (
         <>
             <li
                 onClick={(e) => {
-                    if (e.target.tagName === 'INPUT') return;
+                    if (
+                        e.target.tagName === 'INPUT' ||
+                        e.target.tagName === 'BUTTON' || 
+                        props.task.checked.status
+                    ) return;
                     handleEdit();
                 }}
-                className='taskItem'
+                className={props.task.checked.status ? 'checked taskItem' : 'taskItem'}
                 key={props.task.id} 
                 style={{
-                    background: `linear-gradient(to right, ${props.task.color}, white)`,
-                    opacity: props.task.checked ? '.3' : '1',
+                    background: `linear-gradient(to right, ${props.task.color}, white)`
             }}>
                 <input 
                     type="checkbox" 
-                    checked={props.task.checked} 
+                    checked={props.task.checked.status} 
                     onChange={() => props.onTaskToggle(props.task)}
                 />
                 <span
-                    className={props.task.checked ? 'checked taskName' : 'taskName'}
+                    className={props.task.checked.status ? 'checked taskName' : 'taskName'}
                 >{props.task.name}</span>
 
-                {/* <em className='rating'>{printRating()}</em> */}
-                <RatingTag rating={props.task.rating} />
+                <RatingTag rating={props.task.rating} isEditing={props.isEditing} />
 
                 <button className="deleteBtn" onClick={handleDelete} >×</button>
             </li>

@@ -13,10 +13,11 @@ const AddTaskForm = () => {
     const { household } = useContext(HouseholdContext);
     const [task, setTask] = useState({
         name: '', 
-        checked: false, 
+        checked: { status: false, user: null }, 
         rating: 1,
         color: '#fff'
     });
+    const [selectedColor, setSelectedColor] = useState('#fff');
     const placeholderTasks = [
         "Sortir les poubelles",
         "Passer l'aspirateur",
@@ -42,7 +43,7 @@ const AddTaskForm = () => {
         "Ranger la chambre",
     ];
     const [randomTask, setRandomTask] = useState(placeholderTasks[0]);
-    const getRandomTask = () => {
+    const getRandomPlaceholderTask = () => {
         const newTask = placeholderTasks[Math.floor(Math.random() * placeholderTasks.length)];
         return newTask;
     };
@@ -55,18 +56,20 @@ const AddTaskForm = () => {
         await addTask({
             id: uuidv4(),
             name: task.name,
-            checked: false,
+            checked: { status: false, user: null},
             rating: task.rating,
             createdAt: serverTimestamp(),
             lastModified: serverTimestamp(),
             color: task.color,
             // assignatedUser: null
-        }, household.uid);
-        setTask({...task, name: ''});
+        }, household.id);
+        // Reinitialise le formulaire
+        setTask({...task, name: '', rating: 1, color: '#fff'});
+        setSelectedColor('#fff');
       }
 
     useEffect(() => {
-        const newRandomTask = getRandomTask();
+        const newRandomTask = getRandomPlaceholderTask();
         setRandomTask(newRandomTask);
     }, []);
 
@@ -78,7 +81,9 @@ const AddTaskForm = () => {
             value={task.name} 
             onChange={e => setTask({...task, name: e.target.value})}
         />
-        <ColorPicker task={task} setTask={setTask} defaultColor={''} />
+        <ColorPicker 
+            task={task} setTask={setTask} defaultColor={''} 
+            selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
         <RatingPicker task={task} setTask={setTask} />
 
         <button

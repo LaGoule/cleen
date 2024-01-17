@@ -7,6 +7,7 @@ const SearchFilter = (props) => (
 
         <label className='hasIconRight searchBar' htmlFor="searchBar">
             <input
+                id="searchBar"
                 placeholder='Rechercher'
                 value={props.filter} 
                 onChange={(e) => props.setFilter(e.target.value)}
@@ -22,6 +23,7 @@ const SearchFilter = (props) => (
             <option defaultValue value="added">Par ordre d'ajout</option>
             <option value="alphabetical">Par ordre alphabétique</option>
             <option value="rating">Par nombre d'étoiles</option>
+            <option value="color">Par couleurs</option>
         </select>
     </div>
 );

@@ -23,6 +23,7 @@ const UpdateTaskForm = (props) => {
         lastModified: props.taskToUpdate.lastModified,
         color: props.taskToUpdate.color
     });
+    const [selectedColor, setSelectedColor] = useState(props.taskToUpdate.color);
 
     useEffect(() => {
         setEditedTask({
@@ -43,6 +44,7 @@ const UpdateTaskForm = (props) => {
         }
         await updateTask(editedTask, household.id);
         props.setIsEditing(false);
+        setSelectedColor('#fff');
     }
 
     
@@ -62,7 +64,9 @@ const UpdateTaskForm = (props) => {
                     value={editedTask.name} 
                     onChange={e => setEditedTask({...editedTask, name: e.target.value})}
                 />
-                <ColorPicker task={editedTask} setTask={setEditedTask} defaultColor={editedTask.color} />
+                <ColorPicker 
+                    task={editedTask} setTask={setEditedTask} 
+                    selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
                 <RatingPicker task={editedTask} setTask={setEditedTask} />
 
                 <button

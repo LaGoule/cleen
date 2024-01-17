@@ -9,7 +9,10 @@
   --color-highlight-clear: #e6e7ff;
   --color-negative: #ff6464;
   --color-positive: #42E2B8;
-  --color-alternative: gold;
+  --color-alternative: #ffd700;
+  --color-gold: #fdda28;
+  --color-silver: #b8d0f6;
+  --color-bronze: #f6b58d;
 
   /* color-scheme */
   color: var(--color-black);
@@ -49,6 +52,13 @@
 @keyframes loading-bar-spinner {
 0%   { transform: rotate(0deg);   transform: rotate(0deg); }
 100% { transform: rotate(360deg); transform: rotate(360deg); }
+}
+
+/* Animation shine des medailles */
+@keyframes shine {
+  0% { background-position: -100% 0; }
+  85% { background-position: -100% 0; }
+  100% { background-position: 100% 0; }
 }
 
 
@@ -223,6 +233,9 @@ h1 {
 h1 a{
   color: var(--color-black);
   font-weight: 200;
+
+  position: relative;
+  right: 3px;
 }
 h1 a:hover{
   color: var(--color-highlight-main);
@@ -286,6 +299,7 @@ select{
   outline: 1px solid var(--color-cleargrey);
   border:none;
   border-radius: 3px;
+  transition: box-shadow 0.3s ease;
 }
 select{
   cursor: pointer;
@@ -297,6 +311,7 @@ input:hover,
 select:hover{
   outline: 1px solid var(--color-highlight-clear);
   box-shadow: 0 0 4px rgba(100, 108, 255, 0.5);
+  transition: box-shadow 0.2s ease-out;
 }
 input:focus{
   opacity: 1;
@@ -318,26 +333,31 @@ input[type="checkbox"]{
 
   display: flex;
   flex-direction: column;
-  gap:5px;
+  gap:10px;
 }
 .taskItem{
   text-align: left;
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap:7px;
 
   background-color: white;
   padding:6px 8px;
   border-radius: 10px;
-  box-shadow: 0 0 2px 0 rgba(0,0,0,.2);
-  transition: box-shadow 0.3s ease;
+  box-shadow: 1px 1px 1px 1px rgba(0,0,0,.2);
+  outline: 5px solid transparent;
+  transition: box-shadow 0.3s ease-out, outline 0.3s ease-out;
+  z-index:1;
 }
-.todoList .taskItem:hover{
+.taskItem:hover{
   cursor: pointer;
   
-  box-shadow: 0 0 3px 1px rgba(76, 83, 209, 0.5);
-  color: var(--color-highlight-secondary);
-  transition: box-shadow 0.2s ease-out;
+  box-shadow: 0 0 15px 2px rgba(76, 83, 209, 0.4);
+  /* color: var(--color-highlight-secondary); */
+  outline: 1px solid var(--color-highlight-main);
+  transition: box-shadow 0.2s ease-out, outline 0.5s ease-out;
+  z-index:10;
 }
 .taskItem{
   display: flex;
@@ -347,7 +367,7 @@ input[type="checkbox"]{
 }
 .taskItem>.taskName{
   color: var(--color-black);
-  font-weight: 600;
+  font-weight: 400;
   line-height: 1.1;
   width: 100%;
 
@@ -357,14 +377,17 @@ input[type="checkbox"]{
   text-overflow: ellipsis;
   overflow: hidden;
 }
+.taskItem.checked{
+  opacity: 0.5;
+  transition: opacity 0.3s ease-out, box-shadow 0.3s ease-out, outline 0.3s ease-out;
+}
+.taskItem.checked:hover{
+  opacity: 0.9;
+  transition: opacity 0.2s ease-in, box-shadow 0.2s ease-out, outline 0.2s ease-out;
+}
 .taskItem .checked{
   text-decoration: line-through;
-  opacity: .5;
 }
-/* .todoList>li>div>input[type="text"]{
-  margin:5px;
-  margin-right: 0;
-} */
 
 .formGroup{
   display: flex;
@@ -391,6 +414,10 @@ input[type="checkbox"]{
   border-radius: 4px;
   font-weight: 600;
   font-size: .9em;
+
+  opacity: 0.9;
+  box-shadow: 1px 1px 1px 0px rgba(0,0,0,.3);
+
 }
 
 .deleteBtn,

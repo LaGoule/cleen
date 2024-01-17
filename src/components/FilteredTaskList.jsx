@@ -10,6 +10,7 @@ const FilteredTaskList = (props) => {
             <TaskItem 
                 key={task.id}
                 task={task}
+                userData={props.userData}
                 onTaskToggle={props.handleTaskToggle}
                 setTasks={props.setTasks}
                 tasks={props.tasks}

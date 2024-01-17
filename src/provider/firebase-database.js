@@ -6,9 +6,6 @@ import { getDatabase, get, ref, set, push, remove, update } from "firebase/datab
 const db = getDatabase(app);
 
 
-
-
-
 // On check si l'utilisateur a au moins un foyer attitrer
 // Si c'est le cas on récupère le premier foyer
 // Et on l'enregistre dans le contexte
@@ -33,18 +30,6 @@ const checkAndSetHousehold = async (user, setUser, setHousehold) => {
 
 // Sinon on créer un foyer a id unique et on l'ajoute a l'utilisateur
 const createAndSetHousehold = async (user, setHousehold) => {
-  // Vérifiez si il n'y a pas d'utilisateur ou si un foyer est en cours de création
-  // if (!user || isCreatingHousehold) {
-  //   return;
-  // }
-
-  // // Vérifiez si l'utilisateur a déjà un foyer
-  // const existingHouseholdId = await getHouseholdForUser(user.uid);
-  // if (existingHouseholdId) {
-  //   return;
-  // }
-
-  // Définissez isCreatingHousehold sur true
   setIsCreatingHousehold(true);
   
   const newHouseholdRef = push(ref(db, 'households'));
@@ -53,12 +38,11 @@ const createAndSetHousehold = async (user, setHousehold) => {
     uid: newHouseholdRef.key,
     name: "Foyer de " + user.displayName + "",
     users: {
-      [user.uid]: true, // Ajoutez l'utilisateur au foyer
+      [user.uid]: true,
     },
   });
   const householdId = newHouseholdRef.key;
   await set(ref(db, 'users/' + user.uid + '/householdId'), householdId);
-  // setUser({ ...user, householdId });
   setHousehold({ 
     uid: householdId, 
     name: "Foyer de " + user.displayName + "", 
@@ -118,7 +102,7 @@ const addTask = async (task, householdId) => {
   await set(taskRef, {
     id: task.id,
     name: task.name,
-    checked: false,
+    checked: { status: false, user: null },
     rating: task.rating,
     createdAt: task.createdAt,
     lastModified: task.lastModified,

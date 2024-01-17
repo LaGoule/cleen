@@ -1,12 +1,26 @@
 import React, { useEffect, useState } from 'react';
+import { ref, onValue, off } from 'firebase/database';
+import db from '../provider/firebase-database';
 import TaskList from '../components/TaskList';
 import AddTaskForm from '../components/AddTaskForm';
 import UpdateTaskForm from '../components/UpdateTaskForm';
 
-const PageDashboard = () => {
+const PageDashboard = (props) => {
 
     const [isEditing, setIsEditing] = useState(false);
     const [taskToUpdate, setTaskToUpdate] = useState({});
+    const [userData, setUserData] = useState({});
+
+    useEffect(() => {
+        const userRef = ref(db, 'users/' + props.user.uid);
+        const fetchUser = onValue(userRef, (snapshot) => {
+            const data = snapshot.val();
+            setUserData(data);
+        });
+        return () => {
+            off(userRef, 'value', fetchUser);
+        }
+    }, [props.user.uid]);    
 
     return (
         <>
@@ -14,6 +28,7 @@ const PageDashboard = () => {
                 <div className="card todoListCard">
                     <h2>Liste des tâches</h2>
                     <TaskList 
+                        userData={userData}
                         setIsEditing={setIsEditing}
                         setTaskToUpdate={setTaskToUpdate}
                     />

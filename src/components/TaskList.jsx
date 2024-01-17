@@ -16,6 +16,8 @@ const TaskList = (props) => {
     const [sort, setSort] = useState(false);
     const [filter, setFilter] = useState('');
     const [isLoading, setIsLoading] = useState(true);
+    const [completedTasks, setCompletedTasks] = useState([]);
+    const [incompleteTasks, setIncompleteTasks] = useState([]);
 
     const sortTasks = useCallback((tasks) => {
         let sortedTasks = [...tasks];
@@ -30,24 +32,36 @@ const TaskList = (props) => {
             case 'rating':
                 sortedTasks.sort((a, b) => b.rating - a.rating);
                 break;
+            case 'color':
+                sortedTasks.sort((a, b) => a.color.localeCompare(b.color));
+                break;
         }
         return sortedTasks;
     }, [sort]);
 
     const handleTaskToggle = async (task) => {
         // Créez une copie de la tâche et modifiez la propriété 'checked'
-        const updatedTask = { ...task, checked: !task.checked };
-    
+        const updatedTask = { ...task };
+        
+        // Si la tâche est complétée, ajoutez l'utilisateur actuel comme celui qui a complété la tâche
+        if (!task.checked.status) {
+            updatedTask.checked = { status: true, user: props.userData.uid };
+        } else {
+            updatedTask.checked = { status: false, user: null };
+        }
+        
         // Mettez à jour la tâche dans Firebase
         try {
-          await updateTask(updatedTask, household.id);
-          console.log("Task updated successfully");
+            await updateTask(updatedTask, household.id);
+            if (updatedTask.checked.status) {
+                console.log("Tâche complétée par", props.userData.name);
+            } else {
+                console.log("Tâche incomplète!", updatedTask.checked.user);
+            }
         } catch (error) {
-          console.error("Error updating task", error);
+            console.error("Error updating task", error);
         }
     }
-    let sortedTasks = sortTasks(tasks);
-
 
     useEffect(() => {
         const tasksRef = ref(db, 'tasks/' + household.id);
@@ -59,18 +73,17 @@ const TaskList = (props) => {
             }
             setTasks(taskList);
             setIsLoading(false); 
+
+            let sortedTasks = sortTasks(taskList);
+            setCompletedTasks(sortedTasks.filter(task => task.checked.status));
+            setIncompleteTasks(sortedTasks.filter(task => !task.checked.status));
         });
         
         return () => {
             // Arrêtez d'écouter les mises à jour lorsque le composant est démonté
             off(tasksRef, fetchTasks);
         };
-    }, [household.id]);
-
-
-    const completedTasks = sortedTasks.filter(task => task.checked);
-    const incompleteTasks = sortedTasks.filter(task => !task.checked);
-
+    }, [household.id, sortTasks]);
 
     return (
         <>
@@ -86,7 +99,12 @@ const TaskList = (props) => {
                     :
                     <>
                         {/* <h4>À faire</h4> */}
+                        {
+                        incompleteTasks.length === 0 ?
+                            <p>Il n'y a plus de tâches... Bravo!</p>
+                        :
                         <FilteredTaskList 
+                            userData={props.userData}
                             tasks={incompleteTasks}
                             filter={filter}
                             handleTaskToggle={handleTaskToggle}
@@ -94,6 +112,7 @@ const TaskList = (props) => {
                             setIsEditing={props.setIsEditing}
                             setTaskToUpdate={props.setTaskToUpdate}
                         />
+}
                         {
                             completedTasks.length === 0 ? null :
                             <>
@@ -101,6 +120,7 @@ const TaskList = (props) => {
 
                                 {/* <h4>Tâches terminées</h4> */}
                                 <FilteredTaskList 
+                                    userData={props.userData}
                                     tasks={completedTasks}
                                     filter={filter}
                                     handleTaskToggle={handleTaskToggle}

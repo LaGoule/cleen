@@ -22,7 +22,6 @@ function App() {
   const [user, setUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
-
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
@@ -52,10 +51,10 @@ function App() {
       }
       <main>
         <Routes>
-          <Route path="/" element={user ? <PageDashboard user={user} /> : <PageLogin />} />
-          <Route path="/login" element={<PageLogin />} />
           <Route path="/signup" element={<PageSignup />} />
-          <Route path="/home" element={user ? <PageDashboard /> : <PageLogin />} />
+          <Route path="/login" element={<PageLogin />} />
+          <Route path="/" element={user ? <PageDashboard user={user} /> : <PageLogin />} />
+          <Route path="/home" element={user ? <PageDashboard user={user} /> : <PageLogin />} />
           <Route path="/profile" element={user ? <PageProfile user={user} /> : <PageLogin />} />
           <Route path="/household" element={user ? <PageHousehold user={user} /> : <PageLogin />} />
           <Route path="*" element={<Page404 />} />

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 const ColorPicker = (props) => {
 
@@ -12,14 +12,15 @@ const ColorPicker = (props) => {
     ];
 
     const handleChange = (e) => {
-        props.setTask({...props.task, color: e.target.value})
+        props.setSelectedColor(e.target.value);
+        props.setTask({...props.task, color: e.target.value});
     };
 
     return (
         <>
             <select 
                 onChange={handleChange} 
-                value={props.defaultColor} 
+                value={props.selectedColor} 
                 name="colorSelector" 
                 className="colorSelector"
             >
@@ -27,7 +28,7 @@ const ColorPicker = (props) => {
                     <option 
                         key={color.name}
                         value={color.value}>
-                            {color.name} 
+                            {color.name}
                     </option>
                 ))}
             </select>
