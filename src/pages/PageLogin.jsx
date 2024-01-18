@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 // import { signInWithEmailAndPassword  } from 'firebase/auth';
 import auth, { handleLogin, handleGoogleLogin, handlePasswordReset } from '../provider/firebase-auth';
 import { NavLink, useNavigate } from 'react-router-dom'
+import { GoogleLogo } from '@phosphor-icons/react';
 
 
 const PageLogin = () => {
@@ -40,8 +41,28 @@ const PageLogin = () => {
     
     return (
         <>
+        <div id="loginPage">
             <div className="card">
                 <h2>Connexion requise</h2>
+
+                <button 
+                    style={{display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '10px'}}
+                    className="googleButton" onClick={onGoogleLogin}>Se connecter avec Google
+                    <GoogleLogo size={24} weight="fill" />
+                </button>
+
+                <div
+                    style={{
+                        color: '#ccc',
+                        fontSize: '0.7em',
+                        textTransform: 'uppercase',
+                        display: 'flex', 
+                        justifyContent: 'center', 
+                        alignItems: 'center', 
+                        gap: '10px',
+                        margin: '10px 0'
+                    }}
+                ><hr/>Ou<hr/></div>
 
                 <form>                                              
                     <div>
@@ -57,43 +78,41 @@ const PageLogin = () => {
                             placeholder="Adresse email"
                             onChange={(e)=>setEmail(e.target.value)}
                         />
-                        </div>
-                        <div>
-                            <label htmlFor="password">
-                                Mot de passe
-                            </label>
-                            <input
-                                id="password"
-                                name="password"
-                                type="password"    
-                                value={password} 
-                                required                                                                                
-                                placeholder="Mot de passe"
-                                onChange={(e)=>setPassword(e.target.value)}
-                            />
-                        </div>     
-                        <div>
-                            <button                                    
-                                onClick={onLogin}                                        
-                            >      
-                                Connexion                                                                 
-                            </button>
-                        </div>                               
-                    </form>
+                    </div>
+                    <div>
+                        <label htmlFor="password">
+                            Mot de passe
+                        </label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"    
+                            value={password} 
+                            required                                                                                
+                            placeholder="Mot de passe"
+                            onChange={(e)=>setPassword(e.target.value)}
+                        />
+                    </div>     
+                    <div>
+                        <button                                    
+                            onClick={onLogin}                                        
+                        >      
+                            Connexion                                                                 
+                        </button>
+                    </div>                               
+                </form>
 
-                    <br/><hr/><br/>
-                    <button onClick={onGoogleLogin}>Se connecter avec Google</button><br/><br/>
-                
-                    <p>
-                        Pas encore de compte? {' '}
-                        <NavLink to="/signup">
-                            Créer un compte
-                        </NavLink><br/>
-                        <a onClick={handlePasswordReset}>
-                            Mot de passe oublié?
-                        </a>
-                    </p>
+                <p>
+                    Pas encore de compte? {' '}
+                    <NavLink to="/signup">
+                        Créer un compte
+                    </NavLink><br/>
+                    <a onClick={handlePasswordReset}>
+                        Mot de passe oublié?
+                    </a>
+                </p>
             </div>
+        </div>
         </>
     );
 }

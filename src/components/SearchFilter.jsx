@@ -3,8 +3,7 @@ import React from 'react';
 import { MagnifyingGlass } from '@phosphor-icons/react';
 
 const SearchFilter = (props) => (
-    <div className="formGroup">
-
+    <form>
         <label className='hasIconRight searchBar' htmlFor="searchBar">
             <input
                 id="searchBar"
@@ -19,13 +18,15 @@ const SearchFilter = (props) => (
             value={props.sort} 
             onChange={(e) => props.setSort(e.target.value)}
         >
-            {/* <option value="">--Choisissez un filtre--</option> */}
-            <option defaultValue value="added">Par ordre d'ajout</option>
-            <option value="alphabetical">Par ordre alphabétique</option>
-            <option value="rating">Par nombre d'étoiles</option>
-            <option value="color">Par couleurs</option>
+
+            {/* ajoute fdp les plus recentes les pu ancien */}
+            <option defaultValue value="added">Les plus anciennes</option>
+            <option value="alphabetical">Trier par ordre alphabétique</option>
+            <option value="rating">Trier par nombre d'étoiles</option>
+            <option value="color">Trier par couleurs</option>
+            <option value="random">Ordre aléatoire</option>
         </select>
-    </div>
+    </form>
 );
 
 export default SearchFilter;

@@ -5,6 +5,11 @@ import { getDatabase, get, ref, set, push, remove, update } from "firebase/datab
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);
 
+let isCreatingHousehold = false;
+
+const setIsCreatingHousehold = (status) => {
+  isCreatingHousehold = status;
+};
 
 // On check si l'utilisateur a au moins un foyer attitrer
 // Si c'est le cas on récupère le premier foyer
@@ -17,11 +22,13 @@ const checkAndSetHousehold = async (user, setUser, setHousehold) => {
     const householdData = householdSnapshot.val();
     setHousehold(householdData);
     setUser({ ...user, householdId });
-    // Ajoutez l'utilisateur au foyer
-    await set(ref(db, 'households/' + householdId + '/users/' + user.uid), true);
 
-    setHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
-    // updateHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
+    // Vérifiez si l'utilisateur est déjà dans le foyer
+    if (!householdData.users || !householdData.users[user.uid]) {
+      // Ajoutez l'utilisateur au foyer
+      await set(ref(db, 'households/' + householdId + '/users/' + user.uid), true);
+      setHousehold({ ...householdData, users: { ...householdData.users, [user.uid]: true } });
+    }
 
     return true;
   }
@@ -35,8 +42,8 @@ const createAndSetHousehold = async (user, setHousehold) => {
   const newHouseholdRef = push(ref(db, 'households'));
   await set(newHouseholdRef, {
     // Ajoutez d'autres propriétés du foyer si nécessaire
-    uid: newHouseholdRef.key,
-    name: "Foyer de " + user.displayName + "",
+    id: newHouseholdRef.key,
+    name: user.name ? "Foyer de " + user.name + "" : 'Mon foyer',
     users: {
       [user.uid]: true,
     },
@@ -44,14 +51,27 @@ const createAndSetHousehold = async (user, setHousehold) => {
   const householdId = newHouseholdRef.key;
   await set(ref(db, 'users/' + user.uid + '/householdId'), householdId);
   setHousehold({ 
-    uid: householdId, 
-    name: "Foyer de " + user.displayName + "", 
+    id: householdId, 
+    name: "Foyer de " + user.name + "", 
     users: { [user.uid]: true } 
   });
 
   // Définissez isCreatingHousehold sur false
   setIsCreatingHousehold(false);
 }
+
+const joinHousehold = async (user, householdId) => {
+  // Récupérez les informations du foyer de la base de données
+  const householdRef = ref(db, 'households/' + householdId);
+  const snapshot = await get(householdRef);
+  const householdData = snapshot.val();
+
+  // Vérifiez si l'utilisateur est déjà dans le foyer
+  if (!householdData.users || !householdData.users[user.uid]) {
+      // Ajoutez l'utilisateur au foyer
+      await set(ref(db, 'households/' + householdId + '/users/' + user.uid), true);
+  }
+};
 
 // Fonction pour obtenir le foyer d'un utilisateur
 const getHouseholdForUser = async (userId) => {
@@ -116,7 +136,7 @@ const updateTask = async (task, householdId) => {
   const taskRef = ref(db, `tasks/${householdId}/${task.id}`);
   await update(taskRef, {
     name: task.name,
-    checked: task.checked,
+    checked: task.checked !== undefined ? task.checked : { status: false, user: null },
     rating: task.rating,
     lastModified: task.lastModified,
     color: task.color,
@@ -131,4 +151,4 @@ const deleteTask = async (taskId, householdId) => {
 }
 
 export default db;
-export { checkAndSetHousehold, createAndSetHousehold, getHouseholdForUser, getTasks, addTask, deleteTask, updateTask };
+export { checkAndSetHousehold, createAndSetHousehold, joinHousehold, getHouseholdForUser, getTasks, addTask, deleteTask, updateTask };

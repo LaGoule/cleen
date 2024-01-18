@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { get, ref, set } from 'firebase/database';
-import db, { checkAndSetHousehold, createAndSetHousehold } from '../provider/firebase-database';
+import db, { joinHousehold, createAndSetHousehold } from '../provider/firebase-database';
 
 const HouseholdContext = createContext();
 
@@ -21,7 +21,10 @@ export const HouseholdProvider = ({ children, user }) => {
                 const snapshot = await get(householdRef);
                 if (snapshot.exists()) {
                     setHousehold(snapshot.val());
-                } 
+                } else {
+                    // Le foyer n'existe pas dans la base de données, créez-en un
+                    await createAndSetHousehold(user, setHousehold);
+                }
             } else {
                 await createAndSetHousehold(user, setHousehold);
             }
@@ -38,6 +41,8 @@ export const HouseholdProvider = ({ children, user }) => {
         const householdRef = ref(db, 'households/' + updatedHousehold.id);
         await set(householdRef, updatedHousehold);
         setHousehold(updatedHousehold);
+        //Ajouter le user dans le foyer
+        await joinHousehold(user, updatedHousehold.id);
     };
 
     return (

@@ -15,9 +15,9 @@ const AddTaskForm = () => {
         name: '', 
         checked: { status: false, user: null }, 
         rating: 1,
-        color: '#fff'
+        color: '#EEE'
     });
-    const [selectedColor, setSelectedColor] = useState('#fff');
+    const [selectedColor, setSelectedColor] = useState('#EEE');
     const placeholderTasks = [
         "Sortir les poubelles",
         "Passer l'aspirateur",
@@ -64,8 +64,8 @@ const AddTaskForm = () => {
             // assignatedUser: null
         }, household.id);
         // Reinitialise le formulaire
-        setTask({...task, name: '', rating: 1, color: '#fff'});
-        setSelectedColor('#fff');
+        setTask({...task, name: '', rating: 1, color: '#EEE'});
+        setSelectedColor('#EEE');
       }
 
     useEffect(() => {
@@ -75,21 +75,21 @@ const AddTaskForm = () => {
 
   return (
     <>
-      <div className="formGroup">
-        <input 
-            placeholder={randomTask}
-            value={task.name} 
-            onChange={e => setTask({...task, name: e.target.value})}
-        />
-        <ColorPicker 
-            task={task} setTask={setTask} defaultColor={''} 
-            selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
-        <RatingPicker task={task} setTask={setTask} />
+        <form>
+            <input 
+                placeholder={randomTask}
+                value={task.name} 
+                onChange={e => setTask({...task, name: e.target.value})}
+            />
+            <ColorPicker 
+                task={task} setTask={setTask} defaultColor={''} 
+                selectedColor={selectedColor} setSelectedColor={setSelectedColor} />
+            <RatingPicker task={task} setTask={setTask} />
 
-        <button
-            onClick={handleSubmit}
-        >Ajouter</button>
-    </div>
+            <button type="submit"
+                onClick={handleSubmit}
+            >Ajouter</button>
+        </form>
     </>
   );
 };

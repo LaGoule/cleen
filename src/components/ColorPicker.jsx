@@ -3,12 +3,12 @@ import React, { useEffect, useState } from "react";
 const ColorPicker = (props) => {
 
     const colors = [
-        { name: "Pas de couleur", value: "#fff" },
-        { name: "Jaune", value: "#f9f147" },
-        { name: "Vert", value: "#42E2B8" },
-        { name: "Rouge", value: "#fc868e" },
-        { name: "Bleu", value: "#3dadf2" },
-        { name: "Violet", value: "#d8aeed"}
+        { name: "Pas de couleur", value: "#EEE" },
+        { name: "Jaune", value: "#FFFEC4" },
+        { name: "Vert", value: "#B8F6B5" },
+        { name: "Rouge", value: "#FFCACC" },
+        { name: "Bleu", value: "#B8D0F6" },
+        { name: "Violet", value: "#D0B8F6"}
     ];
 
     const handleChange = (e) => {

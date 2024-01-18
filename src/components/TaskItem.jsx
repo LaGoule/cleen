@@ -1,5 +1,5 @@
 // TaskItem.jsx
-import React, { useState, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef, useEffect } from 'react';
 import { ref, set, update } from "firebase/database";
 import db, { updateTask, deleteTask } from '../provider/firebase-database';
 import HouseholdContext from '../store/HouseholdContext.jsx';
@@ -21,6 +21,7 @@ const TaskItem = (props) => {
         props.setTaskToUpdate(props.task);
     };
 
+
     return (
         <>
             <li
@@ -37,16 +38,21 @@ const TaskItem = (props) => {
                 style={{
                     background: `linear-gradient(to right, ${props.task.color}, white)`
             }}>
+                
                 <input 
-                    type="checkbox" 
-                    checked={props.task.checked.status} 
-                    onChange={() => props.onTaskToggle(props.task)}
+                    type="checkbox" id={props.task.id + '-checkbox'} checked={props.task.checked.status} 
+                    onChange={
+                        props.onTaskToggle ?
+                            () => props.onTaskToggle(props.task)
+                        : null
+                    }
                 />
                 <span
                     className={props.task.checked.status ? 'checked taskName' : 'taskName'}
                 >{props.task.name}</span>
+                
 
-                <RatingTag rating={props.task.rating} isEditing={props.isEditing} />
+                <RatingTag task={props.task} isEditing={props.isEditing} />
 
                 <button className="deleteBtn" onClick={handleDelete} >×</button>
             </li>

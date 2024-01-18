@@ -16,19 +16,18 @@ const PageSignup = () => {const navigate = useNavigate();
             // Signed in
             const user = userCredential.user;
             console.log(user);
-            navigate("/login")
-            // ...
+            navigate("/")
         })
         .catch((error) => {
             const errorCode = error.code;
             const errorMessage = error.message;
             console.log(errorCode, errorMessage);
-            // ..
         });
     }
 
     return (
         <>
+        <div id="signupPage">
             <div className='card'>
                 <h2>Créer un compte.</h2>
                 {/* <p>Créer un compte.</p> */}
@@ -60,24 +59,25 @@ const PageSignup = () => {const navigate = useNavigate();
                             required                                 
                             placeholder="Mot de passe"              
                         />
-                    </div><br/>                                       
-                            
-                    <button
-                        type="submit" 
-                        onClick={onSubmit}                        
-                    >  
-                        Créer un compte                  
-                    </button>
-                                                                        
+                    </div>                                     
+                    <div>
+                        <button
+                            type="submit" 
+                            onClick={onSubmit}                        
+                        >  
+                            Créer un compte                  
+                        </button>     
+                    </div>  
                 </form>
                     
                 <p>
-                    Vous possedez déjà un compte?{' '}
+                    Vous possedez déjà un compte?<br/>
                     <NavLink to="/login" >
                         Se connecter
                     </NavLink>
                 </p>     
             </div>
+        </div>
         </>
     );
 }

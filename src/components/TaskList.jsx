@@ -6,7 +6,7 @@ import db, { updateTask } from '../provider/firebase-database';
 
 import FilteredTaskList from './FilteredTaskList.jsx';
 import SearchFilter from './SearchFilter';
-import TaskItem from './TaskItem';
+// import TaskItem from './TaskItem';
 
 
 const TaskList = (props) => {
@@ -35,6 +35,9 @@ const TaskList = (props) => {
             case 'color':
                 sortedTasks.sort((a, b) => a.color.localeCompare(b.color));
                 break;
+            case 'random':
+                sortedTasks.sort(() => Math.random() - 0.5);
+                break;
         }
         return sortedTasks;
     }, [sort]);
@@ -44,7 +47,7 @@ const TaskList = (props) => {
         const updatedTask = { ...task };
         
         // Si la tâche est complétée, ajoutez l'utilisateur actuel comme celui qui a complété la tâche
-        if (!task.checked.status) {
+        if (task.checked && !task.checked.status) {
             updatedTask.checked = { status: true, user: props.userData.uid };
         } else {
             updatedTask.checked = { status: false, user: null };
@@ -54,9 +57,9 @@ const TaskList = (props) => {
         try {
             await updateTask(updatedTask, household.id);
             if (updatedTask.checked.status) {
-                console.log("Tâche complétée par", props.userData.name);
+                // console.log("Tâche complétée par", props.userData.name);
             } else {
-                console.log("Tâche incomplète!", updatedTask.checked.user);
+                // console.log("Tâche incomplète!", updatedTask.checked.user);
             }
         } catch (error) {
             console.error("Error updating task", error);
@@ -138,3 +141,4 @@ const TaskList = (props) => {
 };
 
 export default TaskList;
+// export { sortTasks };

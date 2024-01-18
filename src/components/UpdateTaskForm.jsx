@@ -44,7 +44,7 @@ const UpdateTaskForm = (props) => {
         }
         await updateTask(editedTask, household.id);
         props.setIsEditing(false);
-        setSelectedColor('#fff');
+        setSelectedColor('#EEE');
     }
 
     
@@ -59,8 +59,9 @@ const UpdateTaskForm = (props) => {
                 <TaskItem task={editedTask} />
             </div> */}
 
-            <div className="formGroup">
+            <form>
                 <input 
+                    autoFocus
                     value={editedTask.name} 
                     onChange={e => setEditedTask({...editedTask, name: e.target.value})}
                 />
@@ -72,7 +73,7 @@ const UpdateTaskForm = (props) => {
                 <button
                     onClick={handleUpdate}
                 >Modifier</button>
-            </div>
+            </form>
         </>
     );
 };

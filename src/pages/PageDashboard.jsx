@@ -34,7 +34,7 @@ const PageDashboard = (props) => {
                     />
                 </div>
 
-                <div className="card taskFormCard">
+                <div className="card addTaskFormCard">
                     <h2>Ajoutez une tâche</h2>
                     <AddTaskForm 
                     />
