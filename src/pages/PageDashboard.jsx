@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { ref, onValue, off } from 'firebase/database';
-import db from '../provider/firebase-database';
-import TaskList from '../components/TaskList';
-import AddTaskForm from '../components/AddTaskForm';
-import UpdateTaskForm from '../components/UpdateTaskForm';
+import db from '../providers/firebase-database';
+import TaskList from '../components/task/TaskList';
+import AddTaskForm from '../components/task/AddTaskForm';
+import UpdateTaskForm from '../components/task/UpdateTaskForm';
 
 const PageDashboard = (props) => {
 

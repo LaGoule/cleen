@@ -1,12 +1,12 @@
 // AddTaskForm.js
 import React, { useState, useContext, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
-import { addTask } from '../provider/firebase-database';
+import { addTask } from '../../providers/firebase-database.js';
 import { serverTimestamp } from "firebase/database";
-import HouseholdContext from '../store/HouseholdContext.jsx';
+import HouseholdContext from '../../contexts/HouseholdContext.jsx';
 
-import ColorPicker from './ColorPicker.jsx';
-import RatingPicker from './RatingPicker.jsx';
+import ColorPicker from '../ui/ColorPicker.jsx';
+import RatingPicker from '../ui/RatingPicker.jsx';
 
 
 const AddTaskForm = () => {

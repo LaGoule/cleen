@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
-import auth from '../provider/firebase-auth';
+import auth from '../providers/firebase-auth';
 
 const PageSignup = () => {const navigate = useNavigate();
  
@@ -19,9 +19,21 @@ const PageSignup = () => {const navigate = useNavigate();
             navigate("/")
         })
         .catch((error) => {
-            const errorCode = error.code;
-            const errorMessage = error.message;
-            console.log(errorCode, errorMessage);
+            console.log(error.code, error.message);
+            // TODO: Switch Handle Errors here.
+            switch (error.code) {
+                case 'auth/email-already-in-use':
+                    alert('Email déjà utilisé');
+                    break;
+                case 'auth/invalid-email':
+                    alert('Email invalide');
+                    break;
+                case 'auth/weak-password':
+                    alert('Mot de passe faible');
+                    break;
+                default:
+                    alert('Erreur inconnue');
+            }
         });
     }
 

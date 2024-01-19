@@ -1,6 +1,6 @@
 import React, { createContext, useState, useEffect } from 'react';
 import { get, ref, set } from 'firebase/database';
-import db, { joinHousehold, createAndSetHousehold } from '../provider/firebase-database';
+import db, { joinHousehold, createAndSetHousehold } from '../providers/firebase-database';
 
 const HouseholdContext = createContext();
 

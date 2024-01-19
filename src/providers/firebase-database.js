@@ -1,6 +1,6 @@
 import app from "./firebase-app";
 import { getDatabase, get, ref, set, push, remove, update } from "firebase/database";
-// import HouseholdContext from "../store/HouseholdContext.jsx";
+// import HouseholdContext from "../contexts/HouseholdContext.jsx";
 
 // Initialize Realtime Database and get a reference to the service
 const db = getDatabase(app);

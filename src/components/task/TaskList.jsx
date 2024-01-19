@@ -1,11 +1,11 @@
 // TaskList.js
 import React, { useState, useContext, useEffect, useCallback } from 'react';
-import HouseholdContext from '../store/HouseholdContext.jsx';
+import HouseholdContext from '../../contexts/HouseholdContext.jsx';
 import { ref, onValue, off, set } from 'firebase/database';
-import db, { updateTask } from '../provider/firebase-database';
+import db, { updateTask } from '../../providers/firebase-database.js';
 
 import FilteredTaskList from './FilteredTaskList.jsx';
-import SearchFilter from './SearchFilter';
+import FiltersGroup from '../FiltersGroup.jsx';
 // import TaskItem from './TaskItem';
 
 
@@ -22,11 +22,14 @@ const TaskList = (props) => {
     const sortTasks = useCallback((tasks) => {
         let sortedTasks = [...tasks];
         switch(sort) {
+            case 'newest':
+            default:
+                sortedTasks.sort((a, b) => b.createdAt - a.createdAt);
+                break;
             case 'alphabetical':
                 sortedTasks.sort((a, b) => a.name.localeCompare(b.name));
                 break;
-            default:
-            case 'added':
+            case 'oldest':
                 sortedTasks.sort((a, b) => a.createdAt - b.createdAt);
                 break;
             case 'rating':
@@ -90,7 +93,7 @@ const TaskList = (props) => {
 
     return (
         <>
-            <SearchFilter 
+            <FiltersGroup 
                 filter={filter} setFilter={setFilter} 
                 sort={sort} setSort={setSort} 
             />

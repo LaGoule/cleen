@@ -1,11 +1,11 @@
 // UpdateTaskForm.js
 import React, { useState, useContext, useEffect } from 'react';
-import { updateTask } from '../provider/firebase-database.js';
+import { updateTask } from '../../providers/firebase-database.js';
 import { serverTimestamp } from "firebase/database";
-import HouseholdContext from '../store/HouseholdContext.jsx';
+import HouseholdContext from '../../contexts/HouseholdContext.jsx';
 
-import ColorPicker from './ColorPicker.jsx';
-import RatingPicker from './RatingPicker.jsx';
+import ColorPicker from '../ui/ColorPicker.jsx';
+import RatingPicker from '../ui/RatingPicker.jsx';
 import TaskItem from './TaskItem.jsx';
 
 import { X } from '@phosphor-icons/react';

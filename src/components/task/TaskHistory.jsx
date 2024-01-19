@@ -1,6 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import FilteredTaskList from './FilteredTaskList';
-import SearchFilter from './SearchFilter';
+import FiltersGroup from '../FiltersGroup';
 
 const TaskHistory = (props) => {
 

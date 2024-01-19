@@ -1,8 +1,8 @@
 // TaskItem.jsx
 import React, { useState, useContext, useRef, useEffect } from 'react';
 import { ref, set, update } from "firebase/database";
-import db, { updateTask, deleteTask } from '../provider/firebase-database';
-import HouseholdContext from '../store/HouseholdContext.jsx';
+import db, { updateTask, deleteTask } from '../../providers/firebase-database.js';
+import HouseholdContext from '../../contexts/HouseholdContext.jsx';
 
 import RatingTag from './RatingTag.jsx';
 

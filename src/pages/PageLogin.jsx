@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 // import { signInWithEmailAndPassword  } from 'firebase/auth';
-import auth, { handleLogin, handleGoogleLogin, handlePasswordReset } from '../provider/firebase-auth';
+import auth, { handleLogin, handleGoogleLogin, handlePasswordReset } from '../providers/firebase-auth';
 import { NavLink, useNavigate } from 'react-router-dom'
 import { GoogleLogo } from '@phosphor-icons/react';
 

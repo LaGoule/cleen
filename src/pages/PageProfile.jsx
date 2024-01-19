@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState, useCallback } from 'react';
 import { onValue, ref, update, off } from "firebase/database";
-import db, { updateTask } from '../provider/firebase-database';
-import HouseholdContext from '../store/HouseholdContext';
+import db, { updateTask } from '../providers/firebase-database';
+import HouseholdContext from '../contexts/HouseholdContext';
 // import FilteredTaskList from '../components/FilteredTaskList';
 // import { sortTasks } from '../components/TaskList';
-import TaskHistory from '../components/TaskHistory';
-import CodeSharer from '../components/CodeSharer';
+import TaskHistory from '../components/task/TaskHistory';
+import CodeSharer from '../components/ui/CodeSharer';
 import { EnvelopeSimple } from  '@phosphor-icons/react';
 
 
@@ -146,8 +146,9 @@ const PageProfile = (props) => {
                 : userData ?
                     <>
                         <div className="profilCard">
-                            <div id={userData.uid} className='avatar'></div>
-                            {/* <img src={userData.photoURL ? userData.photoURL : ''} alt="avatar" /> */}
+                            {/* Créer un composant Avatar */}
+                            {/* <div id={userData.uid} className='avatar'></div> */}
+                            <img  className='avatar' src={userData.photoURL ? userData.photoURL : ''} alt="avatar" />
                             <h3 className="username">{userData.name ? userData.name : 'Annonyme'}</h3>
                             <p className="usermail">{userData.email}
                             <EnvelopeSimple size={18} weight="bold" /></p>

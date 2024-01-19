@@ -4,11 +4,11 @@ import React, { useState, useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 
 import { onAuthStateChanged } from 'firebase/auth';
-import auth, { checkAndCreateUser } from './provider/firebase-auth';
-import { HouseholdProvider } from './store/HouseholdContext';
+import auth, { checkAndCreateUser } from './providers/firebase-auth';
+import { HouseholdProvider } from './contexts/HouseholdContext';
 
 import LoadingSpinner from './components/LoadingSpinner';
-import MainSidebar from './components/MainSidebar';
+import Sidebar from './components/sidebar/Sidebar';
 
 import Page404 from './pages/Page404';
 import PageLogin from './pages/PageLogin';
@@ -46,7 +46,7 @@ function App() {
   return (
     <HouseholdProvider user={user} >
       { user ? 
-        <MainSidebar user={user} />
+        <Sidebar user={user} />
         : <></>
       }
       <main>

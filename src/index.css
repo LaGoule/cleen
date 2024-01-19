@@ -641,7 +641,7 @@ form{
   flex-grow: 1;
   width: 45%;
   min-width: 300px;
-  max-width: 500px;
+  max-width: 400px;
 }
 #profilePage .todoList{
   padding-top:0;
@@ -724,9 +724,7 @@ form{
 }
 #signupPage>.card,
 #loginPage>.card{
-  width: 40%;
-  min-width: 200px;
-  max-width: 320px;
+  width: 20rem;
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -814,12 +812,6 @@ form{
   padding:10px 20px;
   cursor: pointer;
 }
-/* .profilCard{
-  
-}
-.profileCard p{
-  text-align: left;
-} */
 .memberList{
   display: flex;
   flex-direction: column;
@@ -831,7 +823,6 @@ form{
 .memberCard{
   width: 100%;
   background-color: yellow;
-
 
   text-align: left;
   display: flex;
@@ -848,5 +839,5 @@ form{
   z-index:1;
 }
 .memberCard svg{
-  margin-left:20px;
+  margin-left:10px;
 }

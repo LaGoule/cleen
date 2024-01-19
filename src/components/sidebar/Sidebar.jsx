@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import NavigationMenu from "./NavigationMenu";
-import db from '../provider/firebase-database';
 import { ref, onValue, off } from 'firebase/database';
-import { Broom, PaintBrushHousehold } from "@phosphor-icons/react";
+import { Broom } from "@phosphor-icons/react";
 
-const MainSidebar = (props) => {
+import db from '../../providers/firebase-database';
+import NavigationMenu from "./NavigationMenu";
 
+const Sidebar = (props) => {
+    
     const [userData, setUserData] = useState({});
 
     useEffect(() => {
@@ -24,7 +25,8 @@ const MainSidebar = (props) => {
         <>
             <aside>
                 <header>
-                    <h1 id="main-logo"><Link to="/"><Broom className="broom-logo" size={20} weight="fill"/>Cleen</Link></h1>
+                    <h1 id="main-logo"><Link to="/"><Broom className="broom-logo" size={20} weight="fill"/>
+                        Cleen</Link></h1>
                     <NavigationMenu user={props.user} userData={userData} />
                 </header>
             </aside>
@@ -32,4 +34,4 @@ const MainSidebar = (props) => {
     )
 }
 
-export default MainSidebar;
+export default Sidebar;
